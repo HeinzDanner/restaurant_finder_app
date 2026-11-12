@@ -1,0 +1,68 @@
+.app {
+  width: min(100% - 3rem, 760px);
+  margin: 0 auto;
+  padding: 5rem 0;
+}
+
+.intro {
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  color: #176345;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 7vw, 3.8rem);
+  line-height: 1.1;
+  margin: 1rem 0;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.status-card {
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #d8e2d9;
+  border-radius: 1rem;
+  box-shadow: 0 12px 32px #183e2010;
+}
+
+.status-success {
+  color: #176345;
+}
+
+.status-error {
+  color: #a32a20;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.8rem 1.2rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #176345;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #104a33;
+}
+
+button:focus-visible {
+  outline: 3px solid #176345;
+  outline-offset: 4px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
