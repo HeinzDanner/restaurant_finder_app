@@ -22,6 +22,8 @@ jobs:
           cache-dependency-path: backend/pom.xml
       - name: Build, test and generate coverage report
         run: mvn -B -f backend/pom.xml clean verify
+      - name: Verify coverage report exists
+        run: test -s backend/target/site/jacoco/jacoco.xml
       - name: Cache SonarQube packages
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
@@ -37,5 +39,8 @@ jobs:
           args: >
             -Dsonar.organization=heinzdanner
             -Dsonar.projectKey=heinzdanner_restaurant_finder_app_backend
+            -Dsonar.sources=src/main/java
+            -Dsonar.tests=src/test/java
             -Dsonar.java.binaries=target/classes
+            -Dsonar.java.test.binaries=target/test-classes
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml

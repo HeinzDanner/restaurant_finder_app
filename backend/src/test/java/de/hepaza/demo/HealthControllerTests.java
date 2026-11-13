@@ -1,6 +1,7 @@
 package de.hepaza.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -69,5 +70,14 @@ class HealthControllerTests {
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.status").value("error"))
                 .andExpect(jsonPath("$.database").value("unavailable"));
+    }
+
+    @Test
+    void unexpectedErrorsAreNotReportedAsSuccessfulHealthChecks() {
+        MongoTemplate mongoTemplate = mock(MongoTemplate.class);
+        when(mongoTemplate.executeCommand(new Document("ping", 1)))
+                .thenThrow(new IllegalStateException("Unexpected error"));
+
+        assertThrows(IllegalStateException.class, () -> new HealthController(mongoTemplate).health());
     }
 }

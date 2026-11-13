@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.hepaza.demo.model.Restaurant;
 import de.hepaza.demo.repository.RestaurantRepository;
 import de.hepaza.demo.service.RestaurantService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,5 +83,50 @@ class RestaurantFlowTest {
                 .andExpect(jsonPath("$[1].name").value("Sushi"));
 
         verify(repository).findAll();
+    }
+
+    @Test
+    void createdRestaurantsAppearInSubsequentList() throws Exception {
+        List<Restaurant> stored = new ArrayList<>();
+        when(repository.save(any(Restaurant.class))).thenAnswer(invocation -> {
+            Restaurant restaurant = invocation.getArgument(0);
+            stored.add(restaurant);
+            return restaurant;
+        });
+        when(repository.findAll()).thenAnswer(invocation -> List.copyOf(stored));
+
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"  Pizza Haus  \"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("Pizza Haus"));
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Sushi\"}"))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/restaurants"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(stored.get(0).getId()))
+                .andExpect(jsonPath("$[0].name").value("Pizza Haus"))
+                .andExpect(jsonPath("$[1].id").value(stored.get(1).getId()))
+                .andExpect(jsonPath("$[1].name").value("Sushi"));
+    }
+
+    @Test
+    void postPreservesSpecialCharactersAndInternalSpaces() throws Exception {
+        when(repository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"  Café \\\"Zum Markt\\\"  & Bistro  \"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("Café \"Zum Markt\"  & Bistro"));
+
+        ArgumentCaptor<Restaurant> captor = ArgumentCaptor.forClass(Restaurant.class);
+        verify(repository).save(captor.capture());
+        assertThat(captor.getValue().getName()).isEqualTo("Café \"Zum Markt\"  & Bistro");
     }
 }
