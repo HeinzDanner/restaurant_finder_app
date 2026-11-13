@@ -1,99 +1,61 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-
-type ConnectionState =
-  | { kind: 'loading' }
-  | { kind: 'connected' }
-  | { kind: 'error'; message: string }
+import {type FormEvent, useEffect, useState} from 'react'
+import {createRestaurant, getRestaurants, type Restaurant} from './restaurantApi'
 
 function App() {
-  const [connection, setConnection] = useState<ConnectionState>({ kind: 'loading' })
-  const [checkId, setCheckId] = useState(0)
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+    const [name, setName] = useState('')
+    const [error, setError] = useState('')
 
-  useEffect(() => {
-    const controller = new AbortController()
+    useEffect(() => {
+        getRestaurants()
+            .then(setRestaurants)
+            .catch(() => setError('Restaurants konnten nicht geladen werden.'))
+    }, [])
 
-    async function checkConnection() {
-      try {
-        const response = await fetch('/api/health', {
-          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(10000)]),
-          cache: 'no-store',
-        })
-        if (response.status === 503) {
-          throw new Error('Das Backend meldet: MongoDB ist nicht erreichbar.')
-        }
-        if (!response.ok) {
-          throw new Error(`Das Backend antwortet mit HTTP ${response.status}.`)
-        }
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+        setError('')
 
-        const data: unknown = await response.json()
-        if (
-          typeof data !== 'object' ||
-          data === null ||
-          !('status' in data) ||
-          data.status !== 'ok' ||
-          !('database' in data) ||
-          data.database !== 'connected'
-        ) {
-          throw new Error('Das Backend hat einen unerwarteten Status geliefert.')
+        try {
+            const created = await createRestaurant(name)
+            setRestaurants((current) => [...current, created])
+            setName('')
+        } catch {
+            setError('Restaurant konnte nicht gespeichert werden.')
         }
-        if (!controller.signal.aborted) {
-          setConnection({ kind: 'connected' })
-        }
-      } catch (error) {
-        if (!controller.signal.aborted) {
-          setConnection({
-            kind: 'error',
-            message:
-              error instanceof Error
-                ? error.message
-                : 'Die Verbindung zum Backend konnte nicht geprueft werden.',
-          })
-        }
-      }
     }
 
-    void checkConnection()
-    return () => controller.abort()
-  }, [checkId])
+    return (
+        <main>
+            <h1>Restaurant Finder</h1>
 
-  function retryConnection() {
-    setConnection({ kind: 'loading' })
-    setCheckId((value) => value + 1)
-  }
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="restaurant-name">Restaurantname</label>
+                <input
+                    id="restaurant-name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    required
+                />
+                <button type="submit">Hinzufügen</button>
+            </form>
 
-  return (
-    <main className="app">
-      <header className="intro">
-        <p className="eyebrow">Restaurant Finder</p>
-        <h1>Gutes Essen beginnt hier.</h1>
-        <p>Die Basis steht. Als Naechstes finden hier eure Restaurants Platz.</p>
-      </header>
+            {error && <p role="alert">{error}</p>}
 
-      <section className="status-card" aria-labelledby="status-heading">
-        <h2 id="status-heading">Verbindungsstatus</h2>
-        <div role="status" aria-live="polite">
-          {connection.kind === 'loading' && <p>Backend und MongoDB werden geprueft ...</p>}
-          {connection.kind === 'connected' && (
-            <p className="status-success">Backend erreichbar. MongoDB verbunden.</p>
-          )}
-          {connection.kind === 'error' && (
-            <div className="status-error">
-              <p>{connection.message}</p>
-              <p>Pruefe, ob das Backend auf Port 8080 laeuft und MongoDB erreichbar ist.</p>
-            </div>
-          )}
-        </div>
-        <button
-          type="button"
-          onClick={retryConnection}
-          disabled={connection.kind === 'loading'}
-        >
-          Erneut pruefen
-        </button>
-      </section>
-    </main>
-  )
+            <h2>Restaurants</h2>
+            {restaurants.length === 0 ? (
+                <p>Noch keine Restaurants vorhanden.</p>
+            ) : (
+                <ul>
+                    {restaurants.map((restaurant) => (
+                        <li key={restaurant.id}>
+                            {restaurant.name} <small>({restaurant.id})</small>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </main>
+    )
 }
 
 export default App

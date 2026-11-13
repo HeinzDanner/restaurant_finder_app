@@ -31,4 +31,4 @@ jobs:
             -Dsonar.organization=heinzdanner
             -Dsonar.projectKey=heinzdanner_restaurant_finder_app_frontend
             -Dsonar.sources=./frontend/src
-            -Dosnar.coverage.exclusions=**/*
+            -Dsonar.coverage.exclusions=**/*
