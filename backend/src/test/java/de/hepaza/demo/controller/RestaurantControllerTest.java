@@ -112,4 +112,23 @@ class RestaurantControllerTest {
 
         verifyNoInteractions(restaurantService);
     }
+
+    @Test
+    void createRejectsMissingBody() throws Exception {
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(restaurantService);
+    }
+
+    @Test
+    void createRejectsUnsupportedContentType() throws Exception {
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content("Demo Pizza"))
+                .andExpect(status().isUnsupportedMediaType());
+
+        verifyNoInteractions(restaurantService);
+    }
 }

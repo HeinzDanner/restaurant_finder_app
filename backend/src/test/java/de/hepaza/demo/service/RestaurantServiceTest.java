@@ -54,6 +54,19 @@ class RestaurantServiceTest {
     }
 
     @Test
+    void getAllMapsEveryRestaurantInRepositoryOrder() {
+        when(restaurantRepository.findAll()).thenReturn(List.of(
+                new Restaurant("id-1", "Café am Markt"),
+                new Restaurant("id-2", "Sushi Haus")
+        ));
+
+        assertThat(restaurantService.getAll()).containsExactly(
+                new RestaurantDto("id-1", "Café am Markt"),
+                new RestaurantDto("id-2", "Sushi Haus")
+        );
+    }
+
+    @Test
     void createGeneratesUuidTrimsNameAndReturnsSavedRestaurant() {
         when(restaurantRepository.save(any(Restaurant.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -77,6 +90,26 @@ class RestaurantServiceTest {
         assertThat(result).isEqualTo(
                 new RestaurantDto(saved.getId(), "Demo Pizza")
         );
+    }
+
+    @Test
+    void createReturnsValuesActuallySavedByRepository() {
+        when(restaurantRepository.save(any(Restaurant.class)))
+                .thenReturn(new Restaurant("persisted-id", "Gespeicherter Name"));
+
+        assertThat(restaurantService.create(new CreateRestaurantRequest("Eingabe")))
+                .isEqualTo(new RestaurantDto("persisted-id", "Gespeicherter Name"));
+    }
+
+    @Test
+    void createGeneratesDifferentIdsForSeparateRestaurants() {
+        when(restaurantRepository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        RestaurantDto first = restaurantService.create(new CreateRestaurantRequest("Pizza"));
+        RestaurantDto second = restaurantService.create(new CreateRestaurantRequest("Pizza"));
+
+        assertThat(first.id()).isNotEqualTo(second.id());
     }
 
     @Test
