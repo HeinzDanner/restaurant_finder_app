@@ -39,8 +39,6 @@ jobs:
           args: >
             -Dsonar.organization=heinzdanner
             -Dsonar.projectKey=heinzdanner_restaurant_finder_app_backend
-            -Dsonar.sources=src/main/java
-            -Dsonar.tests=src/test/java
+            -Dsonar.exclusions=src/test/**
             -Dsonar.java.binaries=target/classes
-            -Dsonar.java.test.binaries=target/test-classes
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
