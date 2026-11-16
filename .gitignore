@@ -18,3 +18,5 @@
 /frontend/*.local
 #macOS
 .DS_Store
+
+.env.*
