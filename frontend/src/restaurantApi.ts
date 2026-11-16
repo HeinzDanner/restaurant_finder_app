@@ -1,30 +1,16 @@
+import axios from 'axios'
+
 export type Restaurant = {
     id: string
     name: string
 }
 
-export async function getRestaurants(): Promise<Restaurant[]> {
-    const response = await fetch('/api/restaurants')
-
-    if (!response.ok) {
-        throw new Error(`Restaurants konnten nicht geladen werden (${response.status})`)
-    }
-
-    return response.json() as Promise<Restaurant[]>
+export function getRestaurants(): Promise<Restaurant[]> {
+    return axios.get<Restaurant[]>('/api/restaurants')
+        .then((response) => response.data)
 }
 
-export async function createRestaurant(name: string): Promise<Restaurant> {
-    const response = await fetch('/api/restaurants', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({name}),
-    })
-
-    if (!response.ok) {
-        throw new Error(`Restaurant konnte nicht gespeichert werden (${response.status})`)
-    }
-
-    return response.json() as Promise<Restaurant>
+export function createRestaurant(name: string): Promise<Restaurant> {
+    return axios.post<Restaurant>('/api/restaurants', { name })
+        .then((response) => response.data)
 }
