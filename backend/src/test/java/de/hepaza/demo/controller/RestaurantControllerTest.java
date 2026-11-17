@@ -45,7 +45,10 @@ class RestaurantControllerTest {
     @Test
     void getAllReturnsRestaurantsAsJson() throws Exception {
         when(restaurantService.getAll()).thenReturn(
-                List.of(new RestaurantDto("restaurant-1", "Demo Pizza"))
+                List.of(new RestaurantDto(
+                        "restaurant-1", "Demo Pizza",
+                        null, null, null, null, null, null, null
+                ))
         );
 
         mockMvc.perform(get("/api/restaurants"))
@@ -68,11 +71,14 @@ class RestaurantControllerTest {
 
     @Test
     void createReturns201AndCreatedRestaurant() throws Exception {
-        CreateRestaurantRequest request =
-                new CreateRestaurantRequest("Demo Pizza");
-
+        CreateRestaurantRequest request = new CreateRestaurantRequest(
+                "Demo Pizza", null, null, null, null, null
+        );
         when(restaurantService.create(request)).thenReturn(
-                new RestaurantDto("restaurant-1", "Demo Pizza")
+                new RestaurantDto(
+                        "restaurant-1", "Demo Pizza",
+                        null, null, null, null, null, null, null
+                )
         );
 
         mockMvc.perform(post("/api/restaurants")

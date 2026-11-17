@@ -1,6 +1,8 @@
 package de.hepaza.demo.service;
 
+import de.hepaza.demo.dto.AddressDto;
 import de.hepaza.demo.dto.CreateRestaurantRequest;
+import de.hepaza.demo.dto.LocationDto;
 import de.hepaza.demo.dto.RestaurantDto;
 import de.hepaza.demo.model.Restaurant;
 import de.hepaza.demo.repository.RestaurantRepository;
@@ -30,6 +32,16 @@ class RestaurantServiceTest {
     @InjectMocks
     private RestaurantService restaurantService;
 
+    private CreateRestaurantRequest request(String name) {
+        return new CreateRestaurantRequest(name, null, null, null, null, null);
+    }
+
+    private RestaurantDto dto(String id, String name, String source) {
+        return new RestaurantDto(
+                id, name, null, null, null, null, null, source, null
+        );
+    }
+
     @Test
     void getAllReturnsRestaurantDtos() {
         Restaurant restaurant = new Restaurant();
@@ -42,7 +54,7 @@ class RestaurantServiceTest {
         List<RestaurantDto> result = restaurantService.getAll();
 
         assertThat(result).containsExactly(
-                new RestaurantDto("restaurant-1", "Demo Pizza")
+                dto("restaurant-1", "Demo Pizza", null)
         );
     }
 
@@ -61,8 +73,8 @@ class RestaurantServiceTest {
         ));
 
         assertThat(restaurantService.getAll()).containsExactly(
-                new RestaurantDto("id-1", "Café am Markt"),
-                new RestaurantDto("id-2", "Sushi Haus")
+                dto("id-1", "Café am Markt", null),
+                dto("id-2", "Sushi Haus", null)
         );
     }
 
@@ -72,7 +84,7 @@ class RestaurantServiceTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         RestaurantDto result = restaurantService.create(
-                new CreateRestaurantRequest("  Demo Pizza  ")
+                request("  Demo Pizza  ")
         );
 
         ArgumentCaptor<Restaurant> captor =
@@ -88,8 +100,49 @@ class RestaurantServiceTest {
                 .isEqualTo(saved.getId());
 
         assertThat(result).isEqualTo(
-                new RestaurantDto(saved.getId(), "Demo Pizza")
+                dto(saved.getId(), "Demo Pizza", "manual")
         );
+    }
+
+    @Test
+    void createMapsOptionalFieldsAndLocation() {
+        when(restaurantRepository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        AddressDto address = new AddressDto(
+                "Hauptstraße", "12a", "70173", "Stuttgart"
+        );
+        LocationDto location = new LocationDto(
+                "Point", List.of(9.18, 48.78)
+        );
+
+        CreateRestaurantRequest request = new CreateRestaurantRequest(
+                "Demo Bistro",
+                "italienisch",
+                address,
+                location,
+                "https://example.org",
+                "Mo-Fr 11:00-22:00"
+        );
+
+        RestaurantDto result = restaurantService.create(request);
+
+        ArgumentCaptor<Restaurant> captor =
+                ArgumentCaptor.forClass(Restaurant.class);
+        verify(restaurantRepository).save(captor.capture());
+
+        Restaurant saved = captor.getValue();
+        assertThat(saved.getAddress().city()).isEqualTo("Stuttgart");
+        assertThat(saved.getLocation().getX()).isEqualTo(9.18);
+        assertThat(saved.getLocation().getY()).isEqualTo(48.78);
+
+        assertThat(result.cuisine()).isEqualTo("italienisch");
+        assertThat(result.address()).isEqualTo(address);
+        assertThat(result.location()).isEqualTo(location);
+        assertThat(result.website()).isEqualTo("https://example.org");
+        assertThat(result.openingHours()).isEqualTo("Mo-Fr 11:00-22:00");
+        assertThat(result.source()).isEqualTo("manual");
+        assertThat(result.sourceId()).isNull();
     }
 
     @Test
@@ -97,8 +150,8 @@ class RestaurantServiceTest {
         when(restaurantRepository.save(any(Restaurant.class)))
                 .thenReturn(new Restaurant("persisted-id", "Gespeicherter Name"));
 
-        assertThat(restaurantService.create(new CreateRestaurantRequest("Eingabe")))
-                .isEqualTo(new RestaurantDto("persisted-id", "Gespeicherter Name"));
+        assertThat(restaurantService.create(request("Eingabe")))
+                .isEqualTo(dto("persisted-id", "Gespeicherter Name", null));
     }
 
     @Test
@@ -106,8 +159,8 @@ class RestaurantServiceTest {
         when(restaurantRepository.save(any(Restaurant.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        RestaurantDto first = restaurantService.create(new CreateRestaurantRequest("Pizza"));
-        RestaurantDto second = restaurantService.create(new CreateRestaurantRequest("Pizza"));
+        RestaurantDto first = restaurantService.create(request("Pizza"));
+        RestaurantDto second = restaurantService.create(request("Pizza"));
 
         assertThat(first.id()).isNotEqualTo(second.id());
     }
@@ -127,9 +180,7 @@ class RestaurantServiceTest {
         when(restaurantRepository.save(any(Restaurant.class)))
                 .thenThrow(new IllegalStateException("Database unavailable"));
 
-        assertThatThrownBy(() -> restaurantService.create(
-                new CreateRestaurantRequest("Demo Pizza")
-        ))
+        assertThatThrownBy(() -> restaurantService.create(request("Demo Pizza")))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Database unavailable");
     }
