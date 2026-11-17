@@ -7,7 +7,7 @@ public record CreateRestaurantRequest(
         @NotBlank(message = "Der Name darf nicht leer sein")
         String name,
         String cuisine,
-        @Valid AddressDto address,
+        AddressDto address,
         @Valid LocationDto location,
         String website,
         String openingHours
