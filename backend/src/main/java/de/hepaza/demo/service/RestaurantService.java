@@ -40,7 +40,6 @@ public class RestaurantService {
         restaurant.setWebsite(request.website());
         restaurant.setOpeningHours(request.openingHours());
         restaurant.setSource("manual");
-        restaurant.setSourceId(null);
 
         return toDto(restaurantRepository.save(restaurant));
     }
