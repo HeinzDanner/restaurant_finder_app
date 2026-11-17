@@ -37,7 +37,7 @@ export default function WelcomePage() {
                 restaurants.map((restaurant) => (
                     <RestaurantPreview
                         key={restaurant.id}
-                        restaurantName={restaurant.name}
+                        restaurant={restaurant}
                     />
                 ))
             )}

@@ -1,17 +1,20 @@
 import {useNavigate} from "react-router-dom";
+import type {Restaurant} from "../restaurantApi.ts";
 
 type RestaurantPreviewProps = {
-    restaurantName:string,
+    restaurant: Restaurant,
 }
 
-export default function RestaurantPreview(props: Readonly<RestaurantPreviewProps>){
+export default function RestaurantPreview(props: Readonly<RestaurantPreviewProps>) {
 
     const nav = useNavigate();
 
-    return(
+    return (
         <section>
-            <h2>{props.restaurantName}</h2>
-            <button onClick={() => nav("/restaurantDetails")}> Details </button>
+            <h2>{props.restaurant.name}</h2>
+            <button onClick={() => nav("/restaurantDetails",
+                {state: props.restaurant})}> Details
+            </button>
         </section>
     )
 }
