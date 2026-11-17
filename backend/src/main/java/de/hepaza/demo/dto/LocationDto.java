@@ -9,7 +9,7 @@ public record LocationDto(
         String type,
         List<Double> coordinates
 ) {
-    @AssertTrue(message = "location muss ein GeoJSON-Point mit gültigen Koordinaten sein")
+    
     @JsonIgnore
     @AssertTrue(message = "location muss ein GeoJSON-Point mit gültigen Koordinaten sein")
     public boolean isValidPoint() {
