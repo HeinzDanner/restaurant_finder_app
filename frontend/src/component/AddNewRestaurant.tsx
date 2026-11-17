@@ -1,28 +1,19 @@
-import {type FormEvent, useEffect, useState} from 'react'
-import {createRestaurant, getRestaurants, type Restaurant} from '../restaurantApi'
+import { type FormEvent, useState } from 'react'
+import { createRestaurant } from '../restaurantApi'
 import {useNavigate} from "react-router-dom";
 
 export default function AddNewRestaurant() {
 
     const nav = useNavigate();
-    const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [name, setName] = useState('')
     const [error, setError] = useState('')
-
-    useEffect(() => {
-        getRestaurants()
-            .then(setRestaurants)
-            .catch(() => setError('Restaurants konnten nicht geladen werden.'))
-    }, [])
-
+    
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         setError('')
 
         try {
-            const created = await createRestaurant(name)
-            setRestaurants((current) => [...current, created])
-            setName('')
+            await createRestaurant(name)
             nav("/")
         } catch {
             setError('Restaurant konnte nicht gespeichert werden.')
