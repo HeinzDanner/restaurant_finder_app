@@ -14,9 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.hepaza.demo.model.Restaurant;
 import de.hepaza.demo.repository.RestaurantRepository;
 import de.hepaza.demo.service.RestaurantService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -128,5 +130,47 @@ class RestaurantFlowTest {
         ArgumentCaptor<Restaurant> captor = ArgumentCaptor.forClass(Restaurant.class);
         verify(repository).save(captor.capture());
         assertThat(captor.getValue().getName()).isEqualTo("Café \"Zum Markt\"  & Bistro");
+    }
+
+    @Test
+    void postReturnsLocationWithoutValidationProperty() throws Exception {
+        when(repository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Demo Bistro",
+                                  "location": {
+                                    "type": "Point",
+                                    "coordinates": [9.18, 48.78]
+                                  }
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.source").value("manual"))
+                .andExpect(jsonPath("$.location.type").value("Point"))
+                .andExpect(jsonPath("$.location.coordinates[0]").value(9.18))
+                .andExpect(jsonPath("$.location.coordinates[1]").value(48.78))
+                .andExpect(jsonPath("$.location.validPoint").doesNotExist());
+    }
+
+    @Test
+    void postRejectsInvalidLocationBeforeSaving() throws Exception {
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Ungültiger Standort",
+                                  "location": {
+                                    "type": "Point",
+                                    "coordinates": [200, 48.78]
+                                  }
+                                }
+                                """))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(repository);
     }
 }
