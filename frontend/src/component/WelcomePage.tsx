@@ -2,7 +2,7 @@ import {getRestaurants, type Restaurant} from '../restaurantApi'
 import {useEffect, useState} from "react";
 import RestaurantPreview from "./RestaurantPreview.tsx";
 import {useNavigate} from "react-router-dom";
-
+import '../WelcomePage.css'
 
 export default function WelcomePage() {
 
@@ -32,15 +32,15 @@ export default function WelcomePage() {
             ) : error ? (
                 <p role="alert">{error}</p>
             ) : restaurants.length === 0 ? (
-                <p>Noch keine Restaurants vorhanden.</p>
-            ) : (
-                restaurants.map((restaurant) => (
-                    <RestaurantPreview
-                        key={restaurant.id}
-                        restaurantName={restaurant.name}
-                    />
-                ))
-            )}
+                    <p>Noch keine Restaurants vorhanden.</p>
+                ) :
+                (<section className="restaurant-grid">
+                        {restaurants.map((restaurant) => (
+                            <RestaurantPreview key={restaurant.id} restaurantName={restaurant.name}/>
+                        ))}
+                    </section>
+                )
+            }
         </>
     )
 
