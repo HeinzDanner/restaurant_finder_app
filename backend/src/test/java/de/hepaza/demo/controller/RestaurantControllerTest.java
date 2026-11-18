@@ -72,7 +72,7 @@ class RestaurantControllerTest {
     @Test
     void createReturns201AndCreatedRestaurant() throws Exception {
         CreateRestaurantRequest request = new CreateRestaurantRequest(
-                "Demo Pizza", null, null, null, null, null
+                "Demo Pizza", null, null, null, null, null, null, null
         );
         when(restaurantService.create(request)).thenReturn(
                 new RestaurantDto(
@@ -89,6 +89,58 @@ class RestaurantControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("restaurant-1"))
                 .andExpect(jsonPath("$.name").value("Demo Pizza"));
+
+        verify(restaurantService).create(request);
+    }
+
+    @Test
+    void createAcceptsFullRequestAndReturnsFlatResponse() throws Exception {
+        CreateRestaurantRequest request = new CreateRestaurantRequest(
+                "Demo Bistro",
+                List.of("italienisch", "vegetarisch"),
+                "Hauptstraße",
+                "12a",
+                "70173",
+                "Stuttgart",
+                "https://example.org",
+                "Mo-Fr 11:00-22:00"
+        );
+        when(restaurantService.create(request)).thenReturn(new RestaurantDto(
+                "restaurant-1",
+                "Demo Bistro",
+                List.of("italienisch", "vegetarisch"),
+                "Hauptstraße",
+                "12a",
+                "70173",
+                "Stuttgart",
+                "https://example.org",
+                "Mo-Fr 11:00-22:00"
+        ));
+
+        mockMvc.perform(post("/api/restaurants")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Demo Bistro",
+                                  "cuisines": ["italienisch", "vegetarisch"],
+                                  "street": "Hauptstraße",
+                                  "buildingNumber": "12a",
+                                  "postcode": "70173",
+                                  "city": "Stuttgart",
+                                  "website": "https://example.org",
+                                  "openingHours": "Mo-Fr 11:00-22:00"
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value("restaurant-1"))
+                .andExpect(jsonPath("$.cuisines.length()").value(2))
+                .andExpect(jsonPath("$.cuisines[0]").value("italienisch"))
+                .andExpect(jsonPath("$.street").value("Hauptstraße"))
+                .andExpect(jsonPath("$.buildingNumber").value("12a"))
+                .andExpect(jsonPath("$.postcode").value("70173"))
+                .andExpect(jsonPath("$.city").value("Stuttgart"))
+                .andExpect(jsonPath("$.website").value("https://example.org"))
+                .andExpect(jsonPath("$.openingHours").value("Mo-Fr 11:00-22:00"));
 
         verify(restaurantService).create(request);
     }

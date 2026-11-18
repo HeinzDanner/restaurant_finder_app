@@ -3,7 +3,12 @@ import axios from 'axios'
 export type Restaurant = {
     id: string
     name: string
-    cuisine: string
+    cuisines: string[],
+    website: string,
+    street: string,
+    buildingNumber: string,
+    postcode: string,
+    city: string
 }
 
 export function getRestaurants(): Promise<Restaurant[]> {
@@ -11,7 +16,7 @@ export function getRestaurants(): Promise<Restaurant[]> {
         .then((response) => response.data)
 }
 
-export function createRestaurant(name: string): Promise<Restaurant> {
-    return axios.post<Restaurant>('/api/restaurants', {name})
+export function createRestaurant(restaurant: Restaurant): Promise<Restaurant> {
+    return axios.post<Restaurant>('/api/restaurants', restaurant)
         .then((response) => response.data)
 }

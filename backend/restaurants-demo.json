@@ -2,10 +2,10 @@
   {
     "_id": "demo-001",
     "name": "Demo Pasta Wolke",
-    "cuisine": "italienisch",
+    "cuisines": ["italienisch"],
     "address": {
       "street": "Nudelweg",
-      "houseNumber": "1",
+      "buildingNumber": "1",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -21,10 +21,10 @@
   {
     "_id": "demo-002",
     "name": "Demo Sushi Stern",
-    "cuisine": "japanisch",
+    "cuisines": ["japanisch"],
     "address": {
       "street": "Reisweg",
-      "houseNumber": "2a",
+      "buildingNumber": "2a",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -40,10 +40,10 @@
   {
     "_id": "demo-003",
     "name": "Demo Burger Berg",
-    "cuisine": "amerikanisch",
+    "cuisines": ["amerikanisch"],
     "address": {
       "street": "Brötchenweg",
-      "houseNumber": "3",
+      "buildingNumber": "3",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -59,10 +59,10 @@
   {
     "_id": "demo-004",
     "name": "Demo Curry Ecke",
-    "cuisine": "indisch",
+    "cuisines": ["indisch"],
     "address": {
       "street": "Gewürzweg",
-      "houseNumber": "4",
+      "buildingNumber": "4",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -78,10 +78,10 @@
   {
     "_id": "demo-005",
     "name": "Demo Falafel Garten",
-    "cuisine": "orientalisch",
+    "cuisines": ["orientalisch"],
     "address": {
       "street": "Kräuterweg",
-      "houseNumber": "5",
+      "buildingNumber": "5",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -97,10 +97,10 @@
   {
     "_id": "demo-006",
     "name": "Demo Pizza Planet",
-    "cuisine": "italienisch",
+    "cuisines": ["italienisch"],
     "address": {
       "street": "Tomatenweg",
-      "houseNumber": "6",
+      "buildingNumber": "6",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -116,10 +116,10 @@
   {
     "_id": "demo-007",
     "name": "Demo Ramen Haus",
-    "cuisine": "japanisch",
+    "cuisines": ["japanisch"],
     "address": {
       "street": "Suppenweg",
-      "houseNumber": "7",
+      "buildingNumber": "7",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -135,10 +135,10 @@
   {
     "_id": "demo-008",
     "name": "Demo Taco Insel",
-    "cuisine": "mexikanisch",
+    "cuisines": ["mexikanisch"],
     "address": {
       "street": "Maisweg",
-      "houseNumber": "8",
+      "buildingNumber": "8",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -154,10 +154,10 @@
   {
     "_id": "demo-009",
     "name": "Demo Gemüse Glück",
-    "cuisine": "vegetarisch",
+    "cuisines": ["vegetarisch"],
     "address": {
       "street": "Gartenweg",
-      "houseNumber": "9",
+      "buildingNumber": "9",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -173,10 +173,10 @@
   {
     "_id": "demo-010",
     "name": "Demo Spätzle Stube",
-    "cuisine": "schwäbisch",
+    "cuisines": ["schwäbisch"],
     "address": {
       "street": "Teigweg",
-      "houseNumber": "10",
+      "buildingNumber": "10",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -192,10 +192,10 @@
   {
     "_id": "demo-011",
     "name": "Demo Wok Wiese",
-    "cuisine": "asiatisch",
+    "cuisines": ["asiatisch"],
     "address": {
       "street": "Wiesenweg",
-      "houseNumber": "11",
+      "buildingNumber": "11",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -211,10 +211,10 @@
   {
     "_id": "demo-012",
     "name": "Demo Oliven Hof",
-    "cuisine": "griechisch",
+    "cuisines": ["griechisch"],
     "address": {
       "street": "Olivenweg",
-      "houseNumber": "12",
+      "buildingNumber": "12",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -230,10 +230,10 @@
   {
     "_id": "demo-013",
     "name": "Demo Linsen Küche",
-    "cuisine": "schwäbisch",
+    "cuisines": ["schwäbisch"],
     "address": {
       "street": "Linsenweg",
-      "houseNumber": "13",
+      "buildingNumber": "13",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -249,10 +249,10 @@
   {
     "_id": "demo-014",
     "name": "Demo Kräuter Bistro",
-    "cuisine": "vegetarisch",
+    "cuisines": ["vegetarisch"],
     "address": {
       "street": "Blumenweg",
-      "houseNumber": "14",
+      "buildingNumber": "14",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -268,10 +268,10 @@
   {
     "_id": "demo-015",
     "name": "Demo Tapas Treff",
-    "cuisine": "spanisch",
+    "cuisines": ["spanisch"],
     "address": {
       "street": "Sonnenweg",
-      "houseNumber": "15",
+      "buildingNumber": "15",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -287,10 +287,10 @@
   {
     "_id": "demo-016",
     "name": "Demo Nudel Nest",
-    "cuisine": "italienisch",
+    "cuisines": ["italienisch"],
     "address": {
       "street": "Nestweg",
-      "houseNumber": "16",
+      "buildingNumber": "16",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -299,10 +299,10 @@
   {
     "_id": "demo-017",
     "name": "Demo Dal Dorf",
-    "cuisine": "indisch",
+    "cuisines": ["indisch"],
     "address": {
       "street": "Dorfweg",
-      "houseNumber": "17",
+      "buildingNumber": "17",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -311,7 +311,7 @@
   {
     "_id": "demo-018",
     "name": "Demo Grill Garten",
-    "cuisine": "türkisch",
+    "cuisines": ["türkisch"],
     "address": {
       "city": "Stuttgart"
     },
@@ -328,7 +328,7 @@
   {
     "_id": "demo-020",
     "name": "Demo Café Wolke",
-    "cuisine": "café",
+    "cuisines": ["café"],
     "address": {
       "city": "Stuttgart"
     },

@@ -1,23 +1,48 @@
-import { type FormEvent, useState } from 'react'
-import { createRestaurant } from '../restaurantApi'
+import {type FormEvent, useState} from 'react'
+import {createRestaurant} from '../restaurantApi'
 import {useNavigate} from "react-router-dom";
+import type {Restaurant} from "../restaurantApi.ts";
+
 
 export default function AddNewRestaurant() {
 
     const nav = useNavigate();
-    const [name, setName] = useState('')
+    const [restaurant, setRestaurant] = useState<Restaurant>({
+        id: '',
+        name: '',
+        cuisines: [],
+        website: '',
+        street: '',
+        buildingNumber: '',
+        postcode: '',
+        city: ''
+    })
+    const cuisines = [
+        'italienisch',
+        'japanisch',
+        'amerikanisch',
+        'indisch',
+        'orientalisch',
+        'mexikanisch',
+        'vegetarisch',
+        'schwäbisch',
+        'asiatisch',
+        'griechisch',
+        'spanisch',
+        'türkisch'
+    ]
+
     const [error, setError] = useState('')
-    
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         setError('')
-
-        try {
-            await createRestaurant(name)
-            nav("/")
-        } catch {
-            setError('Restaurant konnte nicht gespeichert werden.')
-        }
+        createRestaurant(restaurant)
+            .then(() => nav("/"))
+            .catch(e => {
+                console.log(e);
+                setError('Restaurant konnte nicht gespeichert werden.')
+            })
     }
 
     return (
@@ -26,10 +51,89 @@ export default function AddNewRestaurant() {
                 <label htmlFor="restaurant-name">Restaurantname</label>
                 <input
                     id="restaurant-name"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
+                    value={restaurant.name}
+                    onChange={(event) => setRestaurant({
+                        ...restaurant,
+                        name: event.target.value
+                    })}
                     required
                 />
+                <label htmlFor="website">Website</label>
+                <input
+                    id="website"
+                    type="url"
+                    value={restaurant.website}
+                    onChange={(event) => setRestaurant({
+                        ...restaurant,
+                        website: event.target.value
+                    })}
+                />
+                <h3>Adresse</h3>
+
+                <label htmlFor="street">Straße</label>
+                <input
+                    id="street"
+                    value={restaurant.street}
+                    onChange={(event) => setRestaurant({
+                        ...restaurant,
+                        street: event.target.value
+                    })}
+                />
+
+                <label htmlFor="buildingNumber">Hausnummer</label>
+                <input
+                    id="buildingNumber"
+                    value={restaurant.buildingNumber}
+                    onChange={(event) => setRestaurant({
+                        ...restaurant,
+                        buildingNumber: event.target.value
+                    })}
+                />
+
+                <label htmlFor="postcode">Postleitzahl</label>
+                <input
+                    id="postcode"
+                    value={restaurant.postcode}
+                    onChange={(event) => setRestaurant({
+                        ...restaurant,
+                        postcode: event.target.value
+                    })}
+                />
+
+                <label htmlFor="city">Stadt</label>
+                <input
+                    id="city"
+                    value={restaurant.city}
+                    onChange={(event) => setRestaurant({
+                        ...restaurant,
+                        city: event.target.value
+                    })}
+                />
+                <h3>Küche auswählen:</h3>
+
+                {cuisines.map((cuisine) => (
+                    <label key={cuisine}>
+                        <input
+                            type="checkbox"
+                            value={cuisine}
+                            checked={restaurant.cuisines.includes(cuisine)}
+                            onChange={(e) => {
+                                if (e.target.checked) {
+                                    setRestaurant({
+                                        ...restaurant,
+                                        cuisines: restaurant.cuisines.concat(cuisine)
+                                    })
+                                } else {
+                                    setRestaurant({
+                                        ...restaurant,
+                                        cuisines: restaurant.cuisines.filter(c => c !== cuisine)
+                                    })
+                                }
+                            }}
+                        />
+                        {cuisine}
+                    </label>
+                ))}
                 <button type="submit">Hinzufügen</button>
             </form>
             {error && <p role="alert">{error}</p>}

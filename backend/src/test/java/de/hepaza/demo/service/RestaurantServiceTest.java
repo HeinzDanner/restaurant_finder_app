@@ -1,9 +1,8 @@
 package de.hepaza.demo.service;
 
-import de.hepaza.demo.dto.AddressDto;
 import de.hepaza.demo.dto.CreateRestaurantRequest;
-import de.hepaza.demo.dto.LocationDto;
 import de.hepaza.demo.dto.RestaurantDto;
+import de.hepaza.demo.model.Address;
 import de.hepaza.demo.model.Restaurant;
 import de.hepaza.demo.repository.RestaurantRepository;
 
@@ -33,29 +32,26 @@ class RestaurantServiceTest {
     private RestaurantService restaurantService;
 
     private CreateRestaurantRequest request(String name) {
-        return new CreateRestaurantRequest(name, null, null, null, null, null);
+        return new CreateRestaurantRequest(name, null, null, null, null, null, null, null);
     }
 
-    private RestaurantDto dto(String id, String name, String source) {
-        return new RestaurantDto(
-                id, name, null, null, null, null, null, source, null
-        );
+    private RestaurantDto response(String id, String name) {
+        return new RestaurantDto(id, name, null, null, null, null, null, null, null);
+    }
+
+    private Restaurant savedRestaurant() {
+        ArgumentCaptor<Restaurant> captor = ArgumentCaptor.forClass(Restaurant.class);
+        verify(restaurantRepository).save(captor.capture());
+        return captor.getValue();
     }
 
     @Test
     void getAllReturnsRestaurantDtos() {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId("restaurant-1");
-        restaurant.setName("Demo Pizza");
-
         when(restaurantRepository.findAll())
-                .thenReturn(List.of(restaurant));
+                .thenReturn(List.of(new Restaurant("restaurant-1", "Demo Pizza")));
 
-        List<RestaurantDto> result = restaurantService.getAll();
-
-        assertThat(result).containsExactly(
-                dto("restaurant-1", "Demo Pizza", null)
-        );
+        assertThat(restaurantService.getAll())
+                .containsExactly(response("restaurant-1", "Demo Pizza"));
     }
 
     @Test
@@ -73,76 +69,87 @@ class RestaurantServiceTest {
         ));
 
         assertThat(restaurantService.getAll()).containsExactly(
-                dto("id-1", "Café am Markt", null),
-                dto("id-2", "Sushi Haus", null)
+                response("id-1", "Café am Markt"),
+                response("id-2", "Sushi Haus")
         );
     }
 
     @Test
-    void createGeneratesUuidTrimsNameAndReturnsSavedRestaurant() {
+    void getAllFlattensAddressAndMapsAllFields() {
+        Restaurant restaurant = new Restaurant("id-1", "Demo Bistro");
+        restaurant.setCuisines(List.of("italienisch", "vegetarisch"));
+        restaurant.setAddress(new Address("Hauptstraße", "12a", "70173", "Stuttgart"));
+        restaurant.setWebsite("https://example.org");
+        restaurant.setOpeningHours("Mo-Fr 11:00-22:00");
+        when(restaurantRepository.findAll()).thenReturn(List.of(restaurant));
+
+        assertThat(restaurantService.getAll()).containsExactly(new RestaurantDto(
+                "id-1",
+                "Demo Bistro",
+                List.of("italienisch", "vegetarisch"),
+                "Hauptstraße",
+                "12a",
+                "70173",
+                "Stuttgart",
+                "https://example.org",
+                "Mo-Fr 11:00-22:00"
+        ));
+    }
+
+    @Test
+    void createGeneratesUuidTrimsNameAndSetsManualSource() {
         when(restaurantRepository.save(any(Restaurant.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        RestaurantDto result = restaurantService.create(
-                request("  Demo Pizza  ")
-        );
+        RestaurantDto result = restaurantService.create(request("  Demo Pizza  "));
 
-        ArgumentCaptor<Restaurant> captor =
-                ArgumentCaptor.forClass(Restaurant.class);
-
-        verify(restaurantRepository).save(captor.capture());
-
-        Restaurant saved = captor.getValue();
-
+        Restaurant saved = savedRestaurant();
         assertThat(saved.getName()).isEqualTo("Demo Pizza");
-        assertThat(saved.getId()).isNotBlank();
-        assertThat(UUID.fromString(saved.getId()).toString())
-                .isEqualTo(saved.getId());
+        assertThat(UUID.fromString(saved.getId()).toString()).isEqualTo(saved.getId());
+        assertThat(saved.getSource()).isEqualTo("manual");
+        assertThat(saved.getSourceId()).isNull();
+        assertThat(saved.getLocation()).isNull();
 
-        assertThat(result).isEqualTo(
-                dto(saved.getId(), "Demo Pizza", "manual")
-        );
+        assertThat(result.id()).isEqualTo(saved.getId());
+        assertThat(result.name()).isEqualTo("Demo Pizza");
     }
 
     @Test
-    void createMapsOptionalFieldsAndLocation() {
+    void createMapsCuisinesAddressAndOptionalFields() {
         when(restaurantRepository.save(any(Restaurant.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
-
-        AddressDto address = new AddressDto(
-                "Hauptstraße", "12a", "70173", "Stuttgart"
-        );
-        LocationDto location = new LocationDto(
-                "Point", List.of(9.18, 48.78)
-        );
 
         CreateRestaurantRequest request = new CreateRestaurantRequest(
                 "Demo Bistro",
-                "italienisch",
-                address,
-                location,
+                List.of("italienisch", "vegetarisch"),
+                "Hauptstraße",
+                "12a",
+                "70173",
+                "Stuttgart",
                 "https://example.org",
                 "Mo-Fr 11:00-22:00"
         );
 
         RestaurantDto result = restaurantService.create(request);
 
-        ArgumentCaptor<Restaurant> captor =
-                ArgumentCaptor.forClass(Restaurant.class);
-        verify(restaurantRepository).save(captor.capture());
+        Restaurant saved = savedRestaurant();
+        assertThat(saved.getCuisines()).containsExactly("italienisch", "vegetarisch");
+        assertThat(saved.getAddress())
+                .isEqualTo(new Address("Hauptstraße", "12a", "70173", "Stuttgart"));
+        assertThat(saved.getWebsite()).isEqualTo("https://example.org");
+        assertThat(saved.getOpeningHours()).isEqualTo("Mo-Fr 11:00-22:00");
 
-        Restaurant saved = captor.getValue();
-        assertThat(saved.getAddress().city()).isEqualTo("Stuttgart");
-        assertThat(saved.getLocation().getX()).isEqualTo(9.18);
-        assertThat(saved.getLocation().getY()).isEqualTo(48.78);
-
-        assertThat(result.cuisine()).isEqualTo("italienisch");
-        assertThat(result.address()).isEqualTo(address);
-        assertThat(result.location()).isEqualTo(location);
-        assertThat(result.website()).isEqualTo("https://example.org");
-        assertThat(result.openingHours()).isEqualTo("Mo-Fr 11:00-22:00");
-        assertThat(result.source()).isEqualTo("manual");
-        assertThat(result.sourceId()).isNull();
+        assertThat(result).isEqualTo(new RestaurantDto(
+                saved.getId(),
+                "Demo Bistro",
+                List.of("italienisch", "vegetarisch"),
+                "Hauptstraße",
+                "12a",
+                "70173",
+                "Stuttgart",
+                "https://example.org",
+                "Mo-Fr 11:00-22:00"
+        ));
     }
 
     @Test
@@ -151,7 +158,7 @@ class RestaurantServiceTest {
                 .thenReturn(new Restaurant("persisted-id", "Gespeicherter Name"));
 
         assertThat(restaurantService.create(request("Eingabe")))
-                .isEqualTo(dto("persisted-id", "Gespeicherter Name", null));
+                .isEqualTo(response("persisted-id", "Gespeicherter Name"));
     }
 
     @Test
@@ -180,7 +187,9 @@ class RestaurantServiceTest {
         when(restaurantRepository.save(any(Restaurant.class)))
                 .thenThrow(new IllegalStateException("Database unavailable"));
 
-        assertThatThrownBy(() -> restaurantService.create(request("Demo Pizza")))
+        CreateRestaurantRequest request = request("Demo Pizza");
+
+        assertThatThrownBy(() -> restaurantService.create(request))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Database unavailable");
     }
