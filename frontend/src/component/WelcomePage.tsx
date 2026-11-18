@@ -32,15 +32,15 @@ export default function WelcomePage() {
             ) : error ? (
                 <p role="alert">{error}</p>
             ) : restaurants.length === 0 ? (
-                    <p>Noch keine Restaurants vorhanden.</p>
-                ) :
-                (<section className="restaurant-grid">
-                        {restaurants.map((restaurant) => (
-                            <RestaurantPreview key={restaurant.id} restaurantName={restaurant.name}/>
-                        ))}
-                    </section>
-                )
-            }
+                <p>Noch keine Restaurants vorhanden.</p>
+            ) : (
+                restaurants.map((restaurant) => (
+                    <RestaurantPreview
+                        key={restaurant.id}
+                        restaurant={restaurant}
+                    />
+                ))
+            )}
         </>
     )
 
