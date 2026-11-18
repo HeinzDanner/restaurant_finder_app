@@ -12,6 +12,11 @@ export default function WelcomePage() {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
+    const [searchText, setSearchText] = useState("")
+
+    const filteredRestaurants = restaurants.filter((restaurant) =>
+        restaurant.name.toLowerCase().includes(searchText.trim().toLowerCase())
+    );
 
     useEffect(() => {
         getRestaurants()
@@ -25,23 +30,28 @@ export default function WelcomePage() {
     return (
         <>
             <h1>Welcome to Restaurant finder</h1>
+            <input type={"text"}
+                   onChange={(e) => setSearchText(e.target.value)}
+                   placeholder={"search for a restaurant"}/>
 
-            {isAdmin && <button onClick={() => nav("/addNewRestaurant")}> Add restaurant </button>}
+            {isAdmin && <button onClick={() => nav("/addNewRestaurant")}> Add new restaurant </button>}
             {loading ? (
                 <p>Restaurants werden geladen ...</p>
             ) : error ? (
                 <p role="alert">{error}</p>
             ) : restaurants.length === 0 ? (
                 <p>Noch keine Restaurants vorhanden.</p>
+            ) : filteredRestaurants.length === 0 ? (
+                <p>Keiene passenden Restaurants gefunden</p>
             ) : (
-                restaurants.map((restaurant) => (
+                filteredRestaurants.map((restaurant) => (
                     <RestaurantPreview
                         key={restaurant.id}
                         restaurant={restaurant}
                     />
                 ))
-            )}
+            )
+            }
         </>
     )
-
 }
