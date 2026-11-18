@@ -2,7 +2,7 @@ import {getRestaurants, type Restaurant} from '../restaurantApi'
 import {useEffect, useState} from "react";
 import RestaurantPreview from "./RestaurantPreview.tsx";
 import {useNavigate} from "react-router-dom";
-
+import '../WelcomePage.css'
 
 export default function WelcomePage() {
 
