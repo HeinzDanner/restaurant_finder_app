@@ -13,10 +13,11 @@ export default function WelcomePage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [searchText, setSearchText] = useState("")
+    const [selectedCuisine, setSelectedCuisine] = useState("")
 
     const filteredRestaurants = restaurants.filter((restaurant) =>
-        restaurant.name.toLowerCase().includes(searchText.trim().toLowerCase())
-    );
+        restaurant.name.toLowerCase().includes(searchText.trim().toLowerCase()) &&
+        (selectedCuisine === "" || restaurant.cuisine === selectedCuisine));
 
     useEffect(() => {
         getRestaurants()
@@ -33,6 +34,22 @@ export default function WelcomePage() {
             <input type={"text"}
                    onChange={(e) => setSearchText(e.target.value)}
                    placeholder={"search for a restaurant"}/>
+
+            <select value={selectedCuisine} onChange={(e) => setSelectedCuisine(e.target.value)}>
+                <option value="">Alle Küchen</option>
+                <option value="italienisch">Italienisch</option>
+                <option value="japanisch">Japanisch</option>
+                <option value="amerikanisch">Amerikanisch</option>
+                <option value="indisch">Indisch</option>
+                <option value="orientalisch">Orientalisch</option>
+                <option value="mexikanisch">Mexikanisch</option>
+                <option value="vegetarisch">Vegetarisch</option>
+                <option value="schwäbisch">Schwäbisch</option>
+                <option value="asiatisch">Asiatisch</option>
+                <option value="griechisch">Griechisch</option>
+                <option value="spanisch">Spanisch</option>
+                <option value="türkisch">Türkisch</option>
+            </select>
 
             {isAdmin && <button onClick={() => nav("/addNewRestaurant")}> Add new restaurant </button>}
             {loading ? (
