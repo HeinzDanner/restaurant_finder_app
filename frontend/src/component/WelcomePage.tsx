@@ -42,7 +42,7 @@ export default function WelcomePage() {
             ) : restaurants.length === 0 ? (
                 <p>Noch keine Restaurants vorhanden.</p>
             ) : filteredRestaurants.length === 0 ? (
-                <p>Noch keine Restaurants vorhanden.</p>
+                <p>Keiene passenden Restaurants gefunden</p>
             ) : (
                 filteredRestaurants.map((restaurant) => (
                     <RestaurantPreview
