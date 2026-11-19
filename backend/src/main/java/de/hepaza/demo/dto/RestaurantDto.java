@@ -11,6 +11,7 @@ public record RestaurantDto(
         String postcode,
         String city,
         String website,
-        String openingHours
+        String openingHours,
+        LocationDto location
 ) {
 }

@@ -5,6 +5,8 @@ import de.hepaza.demo.dto.RestaurantDto;
 import de.hepaza.demo.model.Address;
 import de.hepaza.demo.model.Restaurant;
 import de.hepaza.demo.repository.RestaurantRepository;
+import de.hepaza.demo.dto.LocationDto;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -50,6 +52,15 @@ public class RestaurantService {
 
     private RestaurantDto toDto(Restaurant restaurant) {
         Address address = restaurant.getAddress();
+        var point = restaurant.getLocation();
+
+        LocationDto location = point == null
+                ? null
+                : new LocationDto(
+                "Point",
+                List.of(point.getX(), point.getY())
+        );
+
         return new RestaurantDto(
                 restaurant.getId(),
                 restaurant.getName(),
@@ -59,7 +70,8 @@ public class RestaurantService {
                 address != null ? address.postcode() : null,
                 address != null ? address.city() : null,
                 restaurant.getWebsite(),
-                restaurant.getOpeningHours()
+                restaurant.getOpeningHours(),
+                location
         );
     }
 }
