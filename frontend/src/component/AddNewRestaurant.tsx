@@ -148,6 +148,9 @@ export default function AddNewRestaurant() {
                             openingHours: event.target.value
                         })}
                     />
+                    {restaurant.openingHours && (
+                        <span className="format-hint">Format: Mo-Fr 09:00-18:00, Sa 10:00-14:00</span>
+                    )}
                 </p>
 
                 <button type="submit">Hinzufügen</button>

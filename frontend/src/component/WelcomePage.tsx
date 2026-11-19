@@ -6,6 +6,14 @@ import '../WelcomePage.css'
 
 export default function WelcomePage() {
 
+    const [now, setNow] = useState(new Date())
+
+    useEffect(() => {
+        const timer = setInterval(() =>
+            setNow(new Date()), 60000)   // jede Minute
+        return () => clearInterval(timer)  // aufräumen beim Verlassen der Seite
+    }, [])
+
     const isAdmin = true
     const nav = useNavigate()
 
@@ -47,6 +55,7 @@ export default function WelcomePage() {
                     <RestaurantPreview
                         key={restaurant.id}
                         restaurant={restaurant}
+                        now={now}
                     />
                 ))}
             </section>
