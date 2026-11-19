@@ -20,20 +20,24 @@ export default function RestaurantDetails() {
 
             {restaurant ? (
                 <>
-                    <h3>Name</h3>
-                    <p>{restaurant.name}</p>
-
-                    <h3>ID</h3>
-                    <p>{restaurant.id}</p>
+                    <p><strong>Name:</strong> {restaurant.name}</p>
+                    <p><strong>Id:</strong> {restaurant.id}</p>
+                    <p><strong>Cuisines:</strong> {restaurant.cuisines?.join(", ")}</p>
+                    <p><strong>Website:</strong> {restaurant.website}</p>
+                    <p><strong>Address:</strong> {restaurant.street} {restaurant.buildingNumber},
+                        {restaurant.postcode} {restaurant.city}</p>
+                    <p><strong>Opening hours:</strong> {restaurant.openingHours}</p>
 
                     {directionsUrl ? (
-                        <a
-                            href={directionsUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Route planen auf OpenStreetMap
-                        </a>
+                        <p>
+                            <a
+                                href={directionsUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Route planen auf OpenStreetMap
+                            </a>
+                        </p>
                     ) : (
                         <p>
                             Keine Koordinaten vorhanden – Routenplanung nicht möglich.
@@ -44,7 +48,7 @@ export default function RestaurantDetails() {
                 <p>Kein Restaurant ausgewählt.</p>
             )}
 
-            <button onClick={() => navigate('/')}>Zurück</button>
+            <button className={"back-button"} onClick={() => navigate('/')}>Zurück</button>
         </section>
     )
 }
