@@ -1,12 +1,13 @@
 import {useLocation, useNavigate} from 'react-router-dom'
 import type {Restaurant} from '../restaurantApi'
+import '../RestaurantDetails.css'
 
 export default function RestaurantDetails() {
     const location = useLocation()
     const navigate = useNavigate()
     const restaurant = location.state as Restaurant | null
-
     const coordinates = restaurant?.location?.coordinates
+
     const directionsUrl = coordinates
         ? `https://www.openstreetmap.org/directions?to=${encodeURIComponent(
             `${coordinates[1]},${coordinates[0]}`
@@ -14,7 +15,7 @@ export default function RestaurantDetails() {
         : null
 
     return (
-        <section>
+        <section className="restaurant-details">
             <h2>Restaurantdetails</h2>
 
             {restaurant ? (

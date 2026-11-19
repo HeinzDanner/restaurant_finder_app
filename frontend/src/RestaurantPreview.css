@@ -1,0 +1,7 @@
+.restaurant-card {
+    width: 200px;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+}
