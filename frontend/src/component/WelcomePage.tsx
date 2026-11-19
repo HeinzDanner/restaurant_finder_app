@@ -61,12 +61,14 @@ export default function WelcomePage() {
             ) : filteredRestaurants.length === 0 ? (
                 <p>Keiene passenden Restaurants gefunden</p>
             ) : (
-                filteredRestaurants.map((restaurant) => (
-                    <RestaurantPreview
-                        key={restaurant.id}
-                        restaurant={restaurant}
-                    />
-                ))
+                <section className="restaurant-grid">
+                    {filteredRestaurants.map((restaurant) => (
+                        <RestaurantPreview
+                            key={restaurant.id}
+                            restaurant={restaurant}
+                        />
+                    ))}
+                </section>
             )
             }
         </>

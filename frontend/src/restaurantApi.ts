@@ -1,5 +1,10 @@
 import axios from 'axios'
 
+export type RestaurantLocation = {
+    type: 'Point'
+    coordinates: [number, number]
+}
+
 export type Restaurant = {
     id: string
     name: string
