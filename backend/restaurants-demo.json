@@ -2,10 +2,12 @@
   {
     "_id": "demo-001",
     "name": "Demo Pasta Wolke",
-    "cuisine": "italienisch",
+    "cuisines": [
+      "italienisch"
+    ],
     "address": {
       "street": "Nudelweg",
-      "houseNumber": "1",
+      "buildingNumber": "1",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -16,15 +18,18 @@
         48.780
       ]
     },
+    "openingHours": "Mo-Fr 11:00-22:00, Sa-So 12:00-23:00",
     "source": "demo"
   },
   {
     "_id": "demo-002",
     "name": "Demo Sushi Stern",
-    "cuisine": "japanisch",
+    "cuisines": [
+      "japanisch"
+    ],
     "address": {
       "street": "Reisweg",
-      "houseNumber": "2a",
+      "buildingNumber": "2a",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -35,15 +40,18 @@
         48.781
       ]
     },
+    "openingHours": "Di-So 12:00-22:00, Mo geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-003",
     "name": "Demo Burger Berg",
-    "cuisine": "amerikanisch",
+    "cuisines": [
+      "amerikanisch"
+    ],
     "address": {
       "street": "Brötchenweg",
-      "houseNumber": "3",
+      "buildingNumber": "3",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -54,15 +62,18 @@
         48.782
       ]
     },
+    "openingHours": "Mo-So 11:00-23:00",
     "source": "demo"
   },
   {
     "_id": "demo-004",
     "name": "Demo Curry Ecke",
-    "cuisine": "indisch",
+    "cuisines": [
+      "indisch"
+    ],
     "address": {
       "street": "Gewürzweg",
-      "houseNumber": "4",
+      "buildingNumber": "4",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -73,15 +84,18 @@
         48.783
       ]
     },
+    "openingHours": "Mo-Sa 11:30-22:00, So 12:00-21:00",
     "source": "demo"
   },
   {
     "_id": "demo-005",
     "name": "Demo Falafel Garten",
-    "cuisine": "orientalisch",
+    "cuisines": [
+      "orientalisch"
+    ],
     "address": {
       "street": "Kräuterweg",
-      "houseNumber": "5",
+      "buildingNumber": "5",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -92,15 +106,18 @@
         48.784
       ]
     },
+    "openingHours": "Mo-Sa 10:00-21:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-006",
     "name": "Demo Pizza Planet",
-    "cuisine": "italienisch",
+    "cuisines": [
+      "italienisch"
+    ],
     "address": {
       "street": "Tomatenweg",
-      "houseNumber": "6",
+      "buildingNumber": "6",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -111,15 +128,18 @@
         48.785
       ]
     },
+    "openingHours": "Mo-So 11:00-23:00",
     "source": "demo"
   },
   {
     "_id": "demo-007",
     "name": "Demo Ramen Haus",
-    "cuisine": "japanisch",
+    "cuisines": [
+      "japanisch"
+    ],
     "address": {
       "street": "Suppenweg",
-      "houseNumber": "7",
+      "buildingNumber": "7",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -130,15 +150,18 @@
         48.786
       ]
     },
+    "openingHours": "Mo-Fr 11:30-21:30, Sa-So 12:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-008",
     "name": "Demo Taco Insel",
-    "cuisine": "mexikanisch",
+    "cuisines": [
+      "mexikanisch"
+    ],
     "address": {
       "street": "Maisweg",
-      "houseNumber": "8",
+      "buildingNumber": "8",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -149,15 +172,18 @@
         48.787
       ]
     },
+    "openingHours": "Mo-So 12:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-009",
     "name": "Demo Gemüse Glück",
-    "cuisine": "vegetarisch",
+    "cuisines": [
+      "vegetarisch"
+    ],
     "address": {
       "street": "Gartenweg",
-      "houseNumber": "9",
+      "buildingNumber": "9",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -168,15 +194,18 @@
         48.788
       ]
     },
+    "openingHours": "Mo-Fr 09:00-18:00, Sa 10:00-16:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-010",
     "name": "Demo Spätzle Stube",
-    "cuisine": "schwäbisch",
+    "cuisines": [
+      "schwäbisch"
+    ],
     "address": {
       "street": "Teigweg",
-      "houseNumber": "10",
+      "buildingNumber": "10",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -187,15 +216,18 @@
         48.789
       ]
     },
+    "openingHours": "Di-So 11:00-21:00, Mo geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-011",
     "name": "Demo Wok Wiese",
-    "cuisine": "asiatisch",
+    "cuisines": [
+      "asiatisch"
+    ],
     "address": {
       "street": "Wiesenweg",
-      "houseNumber": "11",
+      "buildingNumber": "11",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -206,15 +238,18 @@
         48.776
       ]
     },
+    "openingHours": "Mo-So 11:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-012",
     "name": "Demo Oliven Hof",
-    "cuisine": "griechisch",
+    "cuisines": [
+      "griechisch"
+    ],
     "address": {
       "street": "Olivenweg",
-      "houseNumber": "12",
+      "buildingNumber": "12",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -225,15 +260,18 @@
         48.777
       ]
     },
+    "openingHours": "Mo-Sa 12:00-22:00, So 12:00-21:00",
     "source": "demo"
   },
   {
     "_id": "demo-013",
     "name": "Demo Linsen Küche",
-    "cuisine": "schwäbisch",
+    "cuisines": [
+      "schwäbisch"
+    ],
     "address": {
       "street": "Linsenweg",
-      "houseNumber": "13",
+      "buildingNumber": "13",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -244,15 +282,18 @@
         48.778
       ]
     },
+    "openingHours": "Mo-Fr 11:00-20:00, Sa 11:00-18:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-014",
     "name": "Demo Kräuter Bistro",
-    "cuisine": "vegetarisch",
+    "cuisines": [
+      "vegetarisch"
+    ],
     "address": {
       "street": "Blumenweg",
-      "houseNumber": "14",
+      "buildingNumber": "14",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -263,15 +304,18 @@
         48.779
       ]
     },
+    "openingHours": "Mo-Fr 09:00-18:00, Sa 10:00-15:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-015",
     "name": "Demo Tapas Treff",
-    "cuisine": "spanisch",
+    "cuisines": [
+      "spanisch"
+    ],
     "address": {
       "street": "Sonnenweg",
-      "houseNumber": "15",
+      "buildingNumber": "15",
       "postcode": "70173",
       "city": "Stuttgart"
     },
@@ -282,39 +326,49 @@
         48.780
       ]
     },
+    "openingHours": "Di-So 16:00-23:00, Mo geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-016",
     "name": "Demo Nudel Nest",
-    "cuisine": "italienisch",
+    "cuisines": [
+      "italienisch"
+    ],
     "address": {
       "street": "Nestweg",
-      "houseNumber": "16",
+      "buildingNumber": "16",
       "postcode": "70173",
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-Fr 11:00-21:00, Sa-So 12:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-017",
     "name": "Demo Dal Dorf",
-    "cuisine": "indisch",
+    "cuisines": [
+      "indisch"
+    ],
     "address": {
       "street": "Dorfweg",
-      "houseNumber": "17",
+      "buildingNumber": "17",
       "postcode": "70173",
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-Sa 11:30-22:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-018",
     "name": "Demo Grill Garten",
-    "cuisine": "türkisch",
+    "cuisines": [
+      "türkisch"
+    ],
     "address": {
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-So 10:00-22:00",
     "source": "demo"
   },
   {
@@ -323,16 +377,19 @@
     "address": {
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-Fr 11:00-19:00, Sa-So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-020",
     "name": "Demo Café Wolke",
-    "cuisine": "café",
+    "cuisines": [
+      "café"
+    ],
     "address": {
       "city": "Stuttgart"
     },
-    "openingHours": "Mo-Fr 09:00-17:00",
+    "openingHours": "Mo-Fr 09:00-17:00, Sa-So 10:00-16:00",
     "source": "demo"
   }
 ]

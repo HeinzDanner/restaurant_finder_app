@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import de.hepaza.demo.model.Address;
 import de.hepaza.demo.model.Restaurant;
 import de.hepaza.demo.repository.RestaurantRepository;
 import de.hepaza.demo.service.RestaurantService;
@@ -133,7 +134,7 @@ class RestaurantFlowTest {
     }
 
     @Test
-    void postReturnsLocationWithoutValidationProperty() throws Exception {
+    void postStoresAddressAndCuisinesAndReturnsFlatResponse() throws Exception {
         when(repository.save(any(Restaurant.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -142,35 +143,46 @@ class RestaurantFlowTest {
                         .content("""
                                 {
                                   "name": "Demo Bistro",
-                                  "location": {
-                                    "type": "Point",
-                                    "coordinates": [9.18, 48.78]
-                                  }
+                                  "cuisines": ["italienisch", "vegetarisch"],
+                                  "street": "Hauptstraße",
+                                  "buildingNumber": "12a",
+                                  "postcode": "70173",
+                                  "city": "Stuttgart",
+                                  "website": "https://example.org"
                                 }
                                 """))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.source").value("manual"))
-                .andExpect(jsonPath("$.location.type").value("Point"))
-                .andExpect(jsonPath("$.location.coordinates[0]").value(9.18))
-                .andExpect(jsonPath("$.location.coordinates[1]").value(48.78))
-                .andExpect(jsonPath("$.location.validPoint").doesNotExist());
+                .andExpect(jsonPath("$.cuisines[1]").value("vegetarisch"))
+                .andExpect(jsonPath("$.street").value("Hauptstraße"))
+                .andExpect(jsonPath("$.buildingNumber").value("12a"))
+                .andExpect(jsonPath("$.postcode").value("70173"))
+                .andExpect(jsonPath("$.city").value("Stuttgart"))
+                .andExpect(jsonPath("$.website").value("https://example.org"))
+                .andExpect(jsonPath("$.address").doesNotExist())
+                .andExpect(jsonPath("$.location").doesNotExist());
+
+        ArgumentCaptor<Restaurant> captor = ArgumentCaptor.forClass(Restaurant.class);
+        verify(repository).save(captor.capture());
+        Restaurant saved = captor.getValue();
+        assertThat(saved.getAddress())
+                .isEqualTo(new Address("Hauptstraße", "12a", "70173", "Stuttgart"));
+        assertThat(saved.getCuisines()).containsExactly("italienisch", "vegetarisch");
+        assertThat(saved.getSource()).isEqualTo("manual");
     }
 
     @Test
-    void postRejectsInvalidLocationBeforeSaving() throws Exception {
+    void postIgnoresClientSuppliedIdAndGeneratesUuid() throws Exception {
+        when(repository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
         mockMvc.perform(post("/api/restaurants")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "name": "Ungültiger Standort",
-                                  "location": {
-                                    "type": "Point",
-                                    "coordinates": [200, 48.78]
-                                  }
-                                }
-                                """))
-                .andExpect(status().isBadRequest());
+                        .content("{\"id\":\"\",\"name\":\"Pizza\",\"cuisines\":[]}"))
+                .andExpect(status().isCreated());
 
-        verifyNoInteractions(repository);
+        ArgumentCaptor<Restaurant> captor = ArgumentCaptor.forClass(Restaurant.class);
+        verify(repository).save(captor.capture());
+        String id = captor.getValue().getId();
+        assertThat(UUID.fromString(id).toString()).isEqualTo(id);
     }
 }

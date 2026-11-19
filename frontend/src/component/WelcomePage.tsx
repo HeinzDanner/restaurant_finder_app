@@ -17,7 +17,7 @@ export default function WelcomePage() {
 
     const filteredRestaurants = restaurants.filter((restaurant) =>
         restaurant.name.toLowerCase().includes(searchText.trim().toLowerCase()) &&
-        (selectedCuisine === "" || restaurant.cuisine === selectedCuisine));
+        (selectedCuisine === "" || restaurant.cuisines?.includes(selectedCuisine)));
 
     useEffect(() => {
         getRestaurants()
