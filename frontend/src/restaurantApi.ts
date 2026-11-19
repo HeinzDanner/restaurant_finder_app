@@ -8,7 +8,8 @@ export type Restaurant = {
     street: string,
     buildingNumber: string,
     postcode: string,
-    city: string
+    city: string,
+    openingHours: string
 }
 
 export function getRestaurants(): Promise<Restaurant[]> {

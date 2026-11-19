@@ -15,7 +15,8 @@ export default function AddNewRestaurant() {
         street: '',
         buildingNumber: '',
         postcode: '',
-        city: ''
+        city: '',
+        openingHours: ''
     })
     const cuisines = [
         'italienisch',
@@ -134,6 +135,17 @@ export default function AddNewRestaurant() {
                         {cuisine}
                     </label>
                 ))}
+                <label htmlFor="openingHours">Öffnungszeiten</label>
+                <input
+                    id="openingHours"
+                    type="text"
+                    placeholder="Mo-Fr 09:00-18:00, Sa 10:00-14:00"
+                    value={restaurant.openingHours}
+                    onChange={(event) => setRestaurant({
+                        ...restaurant,
+                        openingHours: event.target.value
+                    })}
+                />
                 <button type="submit">Hinzufügen</button>
             </form>
             {error && <p role="alert">{error}</p>}

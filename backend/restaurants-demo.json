@@ -2,7 +2,9 @@
   {
     "_id": "demo-001",
     "name": "Demo Pasta Wolke",
-    "cuisines": ["italienisch"],
+    "cuisines": [
+      "italienisch"
+    ],
     "address": {
       "street": "Nudelweg",
       "buildingNumber": "1",
@@ -16,12 +18,15 @@
         48.780
       ]
     },
+    "openingHours": "Mo-Fr 11:00-22:00, Sa-So 12:00-23:00",
     "source": "demo"
   },
   {
     "_id": "demo-002",
     "name": "Demo Sushi Stern",
-    "cuisines": ["japanisch"],
+    "cuisines": [
+      "japanisch"
+    ],
     "address": {
       "street": "Reisweg",
       "buildingNumber": "2a",
@@ -35,12 +40,15 @@
         48.781
       ]
     },
+    "openingHours": "Di-So 12:00-22:00, Mo geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-003",
     "name": "Demo Burger Berg",
-    "cuisines": ["amerikanisch"],
+    "cuisines": [
+      "amerikanisch"
+    ],
     "address": {
       "street": "Brötchenweg",
       "buildingNumber": "3",
@@ -54,12 +62,15 @@
         48.782
       ]
     },
+    "openingHours": "Mo-So 11:00-23:00",
     "source": "demo"
   },
   {
     "_id": "demo-004",
     "name": "Demo Curry Ecke",
-    "cuisines": ["indisch"],
+    "cuisines": [
+      "indisch"
+    ],
     "address": {
       "street": "Gewürzweg",
       "buildingNumber": "4",
@@ -73,12 +84,15 @@
         48.783
       ]
     },
+    "openingHours": "Mo-Sa 11:30-22:00, So 12:00-21:00",
     "source": "demo"
   },
   {
     "_id": "demo-005",
     "name": "Demo Falafel Garten",
-    "cuisines": ["orientalisch"],
+    "cuisines": [
+      "orientalisch"
+    ],
     "address": {
       "street": "Kräuterweg",
       "buildingNumber": "5",
@@ -92,12 +106,15 @@
         48.784
       ]
     },
+    "openingHours": "Mo-Sa 10:00-21:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-006",
     "name": "Demo Pizza Planet",
-    "cuisines": ["italienisch"],
+    "cuisines": [
+      "italienisch"
+    ],
     "address": {
       "street": "Tomatenweg",
       "buildingNumber": "6",
@@ -111,12 +128,15 @@
         48.785
       ]
     },
+    "openingHours": "Mo-So 11:00-23:00",
     "source": "demo"
   },
   {
     "_id": "demo-007",
     "name": "Demo Ramen Haus",
-    "cuisines": ["japanisch"],
+    "cuisines": [
+      "japanisch"
+    ],
     "address": {
       "street": "Suppenweg",
       "buildingNumber": "7",
@@ -130,12 +150,15 @@
         48.786
       ]
     },
+    "openingHours": "Mo-Fr 11:30-21:30, Sa-So 12:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-008",
     "name": "Demo Taco Insel",
-    "cuisines": ["mexikanisch"],
+    "cuisines": [
+      "mexikanisch"
+    ],
     "address": {
       "street": "Maisweg",
       "buildingNumber": "8",
@@ -149,12 +172,15 @@
         48.787
       ]
     },
+    "openingHours": "Mo-So 12:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-009",
     "name": "Demo Gemüse Glück",
-    "cuisines": ["vegetarisch"],
+    "cuisines": [
+      "vegetarisch"
+    ],
     "address": {
       "street": "Gartenweg",
       "buildingNumber": "9",
@@ -168,12 +194,15 @@
         48.788
       ]
     },
+    "openingHours": "Mo-Fr 09:00-18:00, Sa 10:00-16:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-010",
     "name": "Demo Spätzle Stube",
-    "cuisines": ["schwäbisch"],
+    "cuisines": [
+      "schwäbisch"
+    ],
     "address": {
       "street": "Teigweg",
       "buildingNumber": "10",
@@ -187,12 +216,15 @@
         48.789
       ]
     },
+    "openingHours": "Di-So 11:00-21:00, Mo geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-011",
     "name": "Demo Wok Wiese",
-    "cuisines": ["asiatisch"],
+    "cuisines": [
+      "asiatisch"
+    ],
     "address": {
       "street": "Wiesenweg",
       "buildingNumber": "11",
@@ -206,12 +238,15 @@
         48.776
       ]
     },
+    "openingHours": "Mo-So 11:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-012",
     "name": "Demo Oliven Hof",
-    "cuisines": ["griechisch"],
+    "cuisines": [
+      "griechisch"
+    ],
     "address": {
       "street": "Olivenweg",
       "buildingNumber": "12",
@@ -225,12 +260,15 @@
         48.777
       ]
     },
+    "openingHours": "Mo-Sa 12:00-22:00, So 12:00-21:00",
     "source": "demo"
   },
   {
     "_id": "demo-013",
     "name": "Demo Linsen Küche",
-    "cuisines": ["schwäbisch"],
+    "cuisines": [
+      "schwäbisch"
+    ],
     "address": {
       "street": "Linsenweg",
       "buildingNumber": "13",
@@ -244,12 +282,15 @@
         48.778
       ]
     },
+    "openingHours": "Mo-Fr 11:00-20:00, Sa 11:00-18:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-014",
     "name": "Demo Kräuter Bistro",
-    "cuisines": ["vegetarisch"],
+    "cuisines": [
+      "vegetarisch"
+    ],
     "address": {
       "street": "Blumenweg",
       "buildingNumber": "14",
@@ -263,12 +304,15 @@
         48.779
       ]
     },
+    "openingHours": "Mo-Fr 09:00-18:00, Sa 10:00-15:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-015",
     "name": "Demo Tapas Treff",
-    "cuisines": ["spanisch"],
+    "cuisines": [
+      "spanisch"
+    ],
     "address": {
       "street": "Sonnenweg",
       "buildingNumber": "15",
@@ -282,39 +326,49 @@
         48.780
       ]
     },
+    "openingHours": "Di-So 16:00-23:00, Mo geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-016",
     "name": "Demo Nudel Nest",
-    "cuisines": ["italienisch"],
+    "cuisines": [
+      "italienisch"
+    ],
     "address": {
       "street": "Nestweg",
       "buildingNumber": "16",
       "postcode": "70173",
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-Fr 11:00-21:00, Sa-So 12:00-22:00",
     "source": "demo"
   },
   {
     "_id": "demo-017",
     "name": "Demo Dal Dorf",
-    "cuisines": ["indisch"],
+    "cuisines": [
+      "indisch"
+    ],
     "address": {
       "street": "Dorfweg",
       "buildingNumber": "17",
       "postcode": "70173",
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-Sa 11:30-22:00, So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-018",
     "name": "Demo Grill Garten",
-    "cuisines": ["türkisch"],
+    "cuisines": [
+      "türkisch"
+    ],
     "address": {
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-So 10:00-22:00",
     "source": "demo"
   },
   {
@@ -323,16 +377,19 @@
     "address": {
       "city": "Stuttgart"
     },
+    "openingHours": "Mo-Fr 11:00-19:00, Sa-So geschlossen",
     "source": "demo"
   },
   {
     "_id": "demo-020",
     "name": "Demo Café Wolke",
-    "cuisines": ["café"],
+    "cuisines": [
+      "café"
+    ],
     "address": {
       "city": "Stuttgart"
     },
-    "openingHours": "Mo-Fr 09:00-17:00",
+    "openingHours": "Mo-Fr 09:00-17:00, Sa-So 10:00-16:00",
     "source": "demo"
   }
 ]
