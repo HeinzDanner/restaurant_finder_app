@@ -47,7 +47,7 @@ class RestaurantControllerTest {
         when(restaurantService.getAll()).thenReturn(
                 List.of(new RestaurantDto(
                         "restaurant-1", "Demo Pizza",
-                        null, null, null, null, null, null, null
+                        null, null, null, null, null, null, null, null
                 ))
         );
 
@@ -77,7 +77,7 @@ class RestaurantControllerTest {
         when(restaurantService.create(request)).thenReturn(
                 new RestaurantDto(
                         "restaurant-1", "Demo Pizza",
-                        null, null, null, null, null, null, null
+                        null, null, null, null, null, null, null, null
                 )
         );
 
@@ -114,7 +114,8 @@ class RestaurantControllerTest {
                 "70173",
                 "Stuttgart",
                 "https://example.org",
-                "Mo-Fr 11:00-22:00"
+                "Mo-Fr 11:00-22:00",
+                null
         ));
 
         mockMvc.perform(post("/api/restaurants")

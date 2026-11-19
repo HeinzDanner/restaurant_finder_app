@@ -15,6 +15,7 @@ export type Restaurant = {
     postcode: string,
     city: string,
     openingHours: string
+    location?: RestaurantLocation | null
 }
 
 export function getRestaurants(): Promise<Restaurant[]> {

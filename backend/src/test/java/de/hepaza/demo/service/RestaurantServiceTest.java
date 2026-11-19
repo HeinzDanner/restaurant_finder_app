@@ -22,6 +22,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.hepaza.demo.dto.LocationDto;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+
 @ExtendWith(MockitoExtension.class)
 class RestaurantServiceTest {
 
@@ -31,12 +34,13 @@ class RestaurantServiceTest {
     @InjectMocks
     private RestaurantService restaurantService;
 
+
     private CreateRestaurantRequest request(String name) {
         return new CreateRestaurantRequest(name, null, null, null, null, null, null, null);
     }
 
     private RestaurantDto response(String id, String name) {
-        return new RestaurantDto(id, name, null, null, null, null, null, null, null);
+        return new RestaurantDto(id, name, null, null, null, null, null, null, null, null);
     }
 
     private Restaurant savedRestaurant() {
@@ -92,7 +96,8 @@ class RestaurantServiceTest {
                 "70173",
                 "Stuttgart",
                 "https://example.org",
-                "Mo-Fr 11:00-22:00"
+                "Mo-Fr 11:00-22:00",
+                null
         ));
     }
 
@@ -148,7 +153,8 @@ class RestaurantServiceTest {
                 "70173",
                 "Stuttgart",
                 "https://example.org",
-                "Mo-Fr 11:00-22:00"
+                "Mo-Fr 11:00-22:00",
+                null
         ));
     }
 
@@ -192,5 +198,17 @@ class RestaurantServiceTest {
         assertThatThrownBy(() -> restaurantService.create(request))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Database unavailable");
+    }
+
+    @Test
+    void getAllMapsLocationAsGeoJson() {
+        Restaurant restaurant = new Restaurant("id-1", "Demo Bistro");
+        restaurant.setLocation(new GeoJsonPoint(9.18, 48.78));
+        when(restaurantRepository.findAll()).thenReturn(List.of(restaurant));
+
+        assertThat(restaurantService.getAll())
+                .singleElement()
+                .extracting(RestaurantDto::location)
+                .isEqualTo(new LocationDto("Point", List.of(9.18, 48.78)));
     }
 }
