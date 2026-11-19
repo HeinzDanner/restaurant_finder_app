@@ -48,8 +48,8 @@ export default function AddNewRestaurant() {
 
     return (
         <section>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="restaurant-name">Restaurantname</label>
+            <form className={"add-restaurant-form"} onSubmit={handleSubmit}>
+                <label htmlFor="restaurant-name">Restaurantname: </label>
                 <input
                     id="restaurant-name"
                     value={restaurant.name}
@@ -59,7 +59,7 @@ export default function AddNewRestaurant() {
                     })}
                     required
                 />
-                <label htmlFor="website">Website</label>
+                <label htmlFor="website">Website: </label>
                 <input
                     id="website"
                     type="url"
@@ -69,7 +69,8 @@ export default function AddNewRestaurant() {
                         website: event.target.value
                     })}
                 />
-                <h3>Adresse</h3>
+
+                <h3 className="address">Adresse: </h3>
 
                 <label htmlFor="street">Straße</label>
                 <input
@@ -135,19 +136,21 @@ export default function AddNewRestaurant() {
                         {cuisine}
                     </label>
                 ))}
-                <label htmlFor="openingHours">Öffnungszeiten</label>
-                <input
-                    id="openingHours"
-                    type="text"
-                    placeholder="Mo-Fr 09:00-18:00, Sa 10:00-14:00"
-                    value={restaurant.openingHours}
-                    onChange={(event) => setRestaurant({
-                        ...restaurant,
-                        openingHours: event.target.value
-                    })}
-                />
-                <button type="submit">Hinzufügen</button>
+                <p>
+                    <label htmlFor="openingHours">Öffnungszeiten</label>
+                    <input
+                        id="openingHours"
+                        type="text"
+                        placeholder="Mo-Fr 09:00-18:00, Sa 10:00-14:00"
+                        value={restaurant.openingHours}
+                        onChange={(event) => setRestaurant({
+                            ...restaurant,
+                            openingHours: event.target.value
+                        })}
+                    />
+                </p>
 
+                <button type="submit">Hinzufügen</button>
                 <button type="button" onClick={() => nav("/")}>Abbrechen</button>
 
             </form>
