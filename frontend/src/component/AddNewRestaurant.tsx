@@ -1,14 +1,14 @@
 import {type FormEvent, useState} from 'react'
 import {createRestaurant} from '../restaurantApi'
 import {useNavigate} from "react-router-dom";
-import type {Restaurant} from "../restaurantApi.ts";
+import type {RestaurantFormData} from "../restaurantApi.ts";
 import '../AddNewRestaurant.css'
+
 
 export default function AddNewRestaurant() {
 
     const nav = useNavigate();
-    const [restaurant, setRestaurant] = useState<Restaurant>({
-        id: '',
+    const [restaurant, setRestaurant] = useState<RestaurantFormData>({
         name: '',
         cuisines: [],
         website: '',
