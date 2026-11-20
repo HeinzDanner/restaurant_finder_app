@@ -5,11 +5,15 @@ function toMinutes(time: string): number {
     return Number(hours) * 60 + Number(minutes)
 }
 
-export function hasOpeningHours(openingHours: string): boolean {
+export function hasOpeningHours(openingHours: string | undefined | null): boolean {
+    if (!openingHours) return false
     return /\d{2}:\d{2}-\d{2}:\d{2}/.test(openingHours)
 }
 
-export function isOpenNow(openingHours: string, now: Date): boolean {
+export function isOpenNow(openingHours: string | null | undefined, now: Date): boolean {
+
+    if (!openingHours) return false
+
     const today = (now.getDay() + 6) % 7          // Mo = 0 … So = 6
     const nowMinutes = now.getHours() * 60 + now.getMinutes()
     const parts = openingHours.split(", ")        // ["Mo-Fr 11:00-22:00", "Sa-So 12:00-23:00"]
