@@ -25,6 +25,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 @ExtendWith(MockitoExtension.class)
 class RestaurantControllerTest {
 
@@ -189,5 +192,52 @@ class RestaurantControllerTest {
                 .andExpect(status().isUnsupportedMediaType());
 
         verifyNoInteractions(restaurantService);
+    }
+
+    @Test
+    void getByIdReturnsRestaurant() throws Exception {
+        when(restaurantService.getById("id-1"))
+                .thenReturn(response("id-1", "Demo Pizza"));
+
+        mockMvc.perform(get("/api/restaurants/id-1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("id-1"))
+                .andExpect(jsonPath("$.name").value("Demo Pizza"));
+
+        verify(restaurantService).getById("id-1");
+    }
+
+    @Test
+    void updateReturnsUpdatedRestaurant() throws Exception {
+        when(restaurantService.update(
+                org.mockito.ArgumentMatchers.eq("id-1"),
+                org.mockito.ArgumentMatchers.any(CreateRestaurantRequest.class)
+        )).thenReturn(response("id-1", "Updated Pizza"));
+
+        mockMvc.perform(put("/api/restaurants/id-1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Updated Pizza",
+                                  "cuisines": ["japanisch"]
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("id-1"))
+                .andExpect(jsonPath("$.name").value("Updated Pizza"));
+    }
+
+    @Test
+    void deleteReturnsNoContent() throws Exception {
+        mockMvc.perform(delete("/api/restaurants/id-1"))
+                .andExpect(status().isNoContent());
+
+        verify(restaurantService).delete("id-1");
+    }
+
+    private RestaurantDto response(String id, String name) {
+        return new RestaurantDto(
+                id, name, null, null, null, null, null, null, null, null
+        );
     }
 }

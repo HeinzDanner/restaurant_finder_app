@@ -25,6 +25,13 @@ import static org.mockito.Mockito.when;
 import de.hepaza.demo.dto.LocationDto;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.mockito.Mockito.never;
+
 @ExtendWith(MockitoExtension.class)
 class RestaurantServiceTest {
 
@@ -34,6 +41,8 @@ class RestaurantServiceTest {
     @InjectMocks
     private RestaurantService restaurantService;
 
+    @Mock
+    private RestaurantGeocoder restaurantGeocoder;
 
     private CreateRestaurantRequest request(String name) {
         return new CreateRestaurantRequest(name, null, null, null, null, null, null, null);
@@ -210,5 +219,165 @@ class RestaurantServiceTest {
                 .singleElement()
                 .extracting(RestaurantDto::location)
                 .isEqualTo(new LocationDto("Point", List.of(9.18, 48.78)));
+    }
+
+    @Test
+    void getByIdReturnsRestaurantDto() {
+        Restaurant restaurant = new Restaurant("id-1", "Demo Pizza");
+        when(restaurantRepository.findById("id-1")).thenReturn(Optional.of(restaurant));
+
+        assertThat(restaurantService.getById("id-1"))
+                .isEqualTo(response("id-1", "Demo Pizza"));
+    }
+
+    @Test
+    void getByIdReturnsNotFoundWhenRestaurantDoesNotExist() {
+        when(restaurantRepository.findById("missing"))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> restaurantService.getById("missing"))
+                .isInstanceOfSatisfying(ResponseStatusException.class, exception ->
+                        assertThat(exception.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    void updateChangesRestaurantAndPreservesLocationWhenAddressIsUnchanged() {
+        Restaurant restaurant = new Restaurant("id-1", "Old Name");
+        restaurant.setAddress(new Address("Hauptstraße", "1", "70173", "Stuttgart"));
+        restaurant.setLocation(new GeoJsonPoint(9.18, 48.78));
+        restaurant.setSource("osm");
+
+        when(restaurantRepository.findById("id-1")).thenReturn(Optional.of(restaurant));
+        when(restaurantRepository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        CreateRestaurantRequest request = new CreateRestaurantRequest(
+                "  New Name  ",
+                List.of("japanisch"),
+                " Hauptstraße ",
+                "1",
+                "70173",
+                "Stuttgart",
+                "https://example.org",
+                "Mo-Fr 11:00-22:00"
+        );
+
+        RestaurantDto result = restaurantService.update("id-1", request);
+
+        assertThat(result.id()).isEqualTo("id-1");
+        assertThat(result.name()).isEqualTo("New Name");
+        assertThat(result.cuisines()).containsExactly("japanisch");
+        assertThat(result.location())
+                .isEqualTo(new LocationDto("Point", List.of(9.18, 48.78)));
+
+        assertThat(restaurant.getSource()).isEqualTo("osm");
+        assertThat(restaurant.getId()).isEqualTo("id-1");
+        verify(restaurantRepository).save(restaurant);
+        verify(restaurantGeocoder, never()).geocode(any(Address.class));
+    }
+
+    @Test
+    void updateClearsLocationWhenAddressChanges() {
+        Restaurant restaurant = new Restaurant("id-1", "Demo Pizza");
+        restaurant.setAddress(new Address("Altstraße", "1", "70173", "Stuttgart"));
+        restaurant.setLocation(new GeoJsonPoint(9.18, 48.78));
+
+        when(restaurantRepository.findById("id-1")).thenReturn(Optional.of(restaurant));
+        when(restaurantRepository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        CreateRestaurantRequest request = new CreateRestaurantRequest(
+                "Demo Pizza",
+                null,
+                "Neustraße",
+                "2",
+                "70173",
+                "Stuttgart",
+                null,
+                null
+        );
+
+        when(restaurantGeocoder.geocode(any(Address.class)))
+                .thenReturn(Optional.empty());
+
+        RestaurantDto result = restaurantService.update("id-1", request);
+
+        assertThat(restaurant.getAddress())
+                .isEqualTo(new Address("Neustraße", "2", "70173", "Stuttgart"));
+        assertThat(restaurant.getLocation()).isNull();
+        assertThat(result.location()).isNull();
+        verify(restaurantRepository).save(restaurant);
+    }
+
+    @Test
+    void updateReturnsNotFoundWhenRestaurantDoesNotExist() {
+        when(restaurantRepository.findById("missing"))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> restaurantService.update("missing", request("Pizza")))
+                .isInstanceOfSatisfying(ResponseStatusException.class, exception ->
+                        assertThat(exception.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND));
+
+        verify(restaurantRepository, never()).save(any(Restaurant.class));
+    }
+
+    @Test
+    void deleteRemovesRestaurant() {
+        Restaurant restaurant = new Restaurant("id-1", "Demo Pizza");
+        when(restaurantRepository.findById("id-1")).thenReturn(Optional.of(restaurant));
+
+        restaurantService.delete("id-1");
+
+        verify(restaurantRepository).delete(restaurant);
+    }
+
+    @Test
+    void deleteReturnsNotFoundWhenRestaurantDoesNotExist() {
+        when(restaurantRepository.findById("missing"))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> restaurantService.delete("missing"))
+                .isInstanceOfSatisfying(ResponseStatusException.class, exception ->
+                        assertThat(exception.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND));
+
+        verify(restaurantRepository, never()).delete(any(Restaurant.class));
+    }
+
+    @Test
+    void updateStoresNewLocationWhenGeocodingSucceeds() {
+        Restaurant restaurant = new Restaurant("id-1", "Demo Pizza");
+        restaurant.setAddress(new Address("Altstraße", "1", "70173", "Stuttgart"));
+        restaurant.setLocation(new GeoJsonPoint(9.18, 48.78));
+
+        Address newAddress = new Address("Neustraße", "2", "70173", "Stuttgart");
+        GeoJsonPoint newLocation = new GeoJsonPoint(9.20, 48.79);
+
+        when(restaurantRepository.findById("id-1"))
+                .thenReturn(Optional.of(restaurant));
+        when(restaurantGeocoder.geocode(newAddress))
+                .thenReturn(Optional.of(newLocation));
+        when(restaurantRepository.save(any(Restaurant.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        CreateRestaurantRequest request = new CreateRestaurantRequest(
+                "Demo Pizza",
+                null,
+                "Neustraße",
+                "2",
+                "70173",
+                "Stuttgart",
+                null,
+                null
+        );
+
+        RestaurantDto result = restaurantService.update("id-1", request);
+
+        assertThat(restaurant.getAddress()).isEqualTo(newAddress);
+        assertThat(restaurant.getLocation()).isEqualTo(newLocation);
+        assertThat(result.location())
+                .isEqualTo(new LocationDto("Point", List.of(9.20, 48.79)));
+
+        verify(restaurantGeocoder).geocode(newAddress);
+        verify(restaurantRepository).save(restaurant);
     }
 }
