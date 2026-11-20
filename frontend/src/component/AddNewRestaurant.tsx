@@ -2,7 +2,7 @@ import {type FormEvent, useState} from 'react'
 import {createRestaurant} from '../restaurantApi'
 import {useNavigate} from "react-router-dom";
 import type {Restaurant} from "../restaurantApi.ts";
-
+import '../AddNewRestaurant.css'
 
 export default function AddNewRestaurant() {
 
@@ -147,6 +147,9 @@ export default function AddNewRestaurant() {
                     })}
                 />
                 <button type="submit">Hinzufügen</button>
+
+                <button type="button" onClick={() => nav("/")}>Abbrechen</button>
+
             </form>
             {error && <p role="alert">{error}</p>}
         </section>
