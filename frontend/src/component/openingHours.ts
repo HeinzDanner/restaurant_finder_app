@@ -28,7 +28,11 @@ export function isOpenNow(openingHours: string | null | undefined, now: Date): b
         if (today < start || today > end) continue
 
         const [openTime, closeTime] = timePart.split("-")
-        return nowMinutes >= toMinutes(openTime) && nowMinutes < toMinutes(closeTime)
+        if (!openTime || !closeTime) continue
+
+        if (nowMinutes >= toMinutes(openTime) && nowMinutes < toMinutes(closeTime)) {
+            return true
+        }
     }
     return false
 }
