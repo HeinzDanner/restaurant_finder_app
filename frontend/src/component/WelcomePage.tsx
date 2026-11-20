@@ -28,49 +28,60 @@ export default function WelcomePage() {
             .finally(() => setLoading(false))
     }, [])
 
+    function renderRestaurants() {
+        if (loading) {
+            return <p>Restaurants werden geladen ...</p>
+        }
+        if (error) {
+            return <p role="alert">{error}</p>
+        }
+        if (restaurants.length === 0) {
+            return <p>Noch keine Restaurants vorhanden.</p>
+        }
+        if (filteredRestaurants.length === 0) {
+            return <p>Keine passenden Restaurants gefunden</p>
+        }
+        return (
+            <section className="restaurant-grid">
+                {filteredRestaurants.map((restaurant) => (
+                    <RestaurantPreview
+                        key={restaurant.id}
+                        restaurant={restaurant}
+                    />
+                ))}
+            </section>
+        )
+    }
+
     return (
         <>
             <h1>Welcome to Restaurant finder</h1>
-            <input type={"text"}
-                   onChange={(e) => setSearchText(e.target.value)}
-                   placeholder={"search for a restaurant"}/>
 
-            <select value={selectedCuisine} onChange={(e) => setSelectedCuisine(e.target.value)}>
-                <option value="">Alle Küchen</option>
-                <option value="italienisch">Italienisch</option>
-                <option value="japanisch">Japanisch</option>
-                <option value="amerikanisch">Amerikanisch</option>
-                <option value="indisch">Indisch</option>
-                <option value="orientalisch">Orientalisch</option>
-                <option value="mexikanisch">Mexikanisch</option>
-                <option value="vegetarisch">Vegetarisch</option>
-                <option value="schwäbisch">Schwäbisch</option>
-                <option value="asiatisch">Asiatisch</option>
-                <option value="griechisch">Griechisch</option>
-                <option value="spanisch">Spanisch</option>
-                <option value="türkisch">Türkisch</option>
-            </select>
+            {isAdmin &&
+                <button className={"add-button"} onClick={() => nav("/addNewRestaurant")}> Add new restaurant </button>}
 
-            {isAdmin && <button onClick={() => nav("/addNewRestaurant")}> Add new restaurant </button>}
-            {loading ? (
-                <p>Restaurants werden geladen ...</p>
-            ) : error ? (
-                <p role="alert">{error}</p>
-            ) : restaurants.length === 0 ? (
-                <p>Noch keine Restaurants vorhanden.</p>
-            ) : filteredRestaurants.length === 0 ? (
-                <p>Keiene passenden Restaurants gefunden</p>
-            ) : (
-                <section className="restaurant-grid">
-                    {filteredRestaurants.map((restaurant) => (
-                        <RestaurantPreview
-                            key={restaurant.id}
-                            restaurant={restaurant}
-                        />
-                    ))}
-                </section>
-            )
-            }
+            <section className="search-bar">
+                <input type={"text"}
+                       onChange={(e) => setSearchText(e.target.value)}
+                       placeholder={"search for a restaurant"}/>
+
+                <select value={selectedCuisine} onChange={(e) => setSelectedCuisine(e.target.value)}>
+                    <option value="">Alle Küchen</option>
+                    <option value="italienisch">Italienisch</option>
+                    <option value="japanisch">Japanisch</option>
+                    <option value="amerikanisch">Amerikanisch</option>
+                    <option value="indisch">Indisch</option>
+                    <option value="orientalisch">Orientalisch</option>
+                    <option value="mexikanisch">Mexikanisch</option>
+                    <option value="vegetarisch">Vegetarisch</option>
+                    <option value="schwäbisch">Schwäbisch</option>
+                    <option value="asiatisch">Asiatisch</option>
+                    <option value="griechisch">Griechisch</option>
+                    <option value="spanisch">Spanisch</option>
+                    <option value="türkisch">Türkisch</option>
+                </select>
+            </section>
+            {renderRestaurants()}
         </>
     )
 }

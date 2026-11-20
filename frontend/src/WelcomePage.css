@@ -2,4 +2,16 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+
+}
+
+.search-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.add-button {
+    margin-top: 24px;
+    margin-bottom: 24px;
 }

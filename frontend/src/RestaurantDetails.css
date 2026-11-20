@@ -1,0 +1,13 @@
+.restaurant-details {
+    width: 400px;
+    padding: 16px;
+    border: 5px solid #ccc;
+    border-radius: 8px;
+}
+
+.back-button {
+    display: block;
+    margin: 16px auto 0;
+    padding: 8px 24px;
+    font-size: 1rem;
+}
