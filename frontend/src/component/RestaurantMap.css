@@ -1,0 +1,34 @@
+.restaurant-map {
+    width: 100%;
+    margin: 16px 0;
+}
+
+.restaurant-map-container {
+    width: 100%;
+    height: 420px;
+    border-radius: 8px;
+}
+
+.start-map-marker,
+.restaurant-map-marker {
+    background: transparent;
+    border: 0;
+}
+
+.start-map-marker span,
+.restaurant-map-marker span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 1px 5px #333;
+}
+
+.start-map-marker span {
+    background: #2563eb;
+}
+
+.restaurant-map-marker span {
+    background: #dc2626;
+}
