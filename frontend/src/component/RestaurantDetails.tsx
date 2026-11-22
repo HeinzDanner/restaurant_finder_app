@@ -1,13 +1,17 @@
 import {useState} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
-import {deleteRestaurant, type Restaurant} from '../restaurantApi'
+import {deleteRestaurant, type Restaurant, type StartPoint} from '../restaurantApi'
 import '../RestaurantDetails.css'
 
 type RestaurantDetailsState = Restaurant & {
     geocodingWarning?: boolean
 }
 
-export default function RestaurantDetails() {
+type RestaurantDetailsProps = {
+    startPoint: StartPoint | null
+}
+
+export default function RestaurantDetails({startPoint}: RestaurantDetailsProps) {
     const location = useLocation()
     const navigate = useNavigate()
     const restaurant = location.state as RestaurantDetailsState | null
@@ -17,8 +21,14 @@ export default function RestaurantDetails() {
 
     const coordinates = restaurant?.location?.coordinates
 
+    const startCoordinates = startPoint?.location.coordinates
+
     const directionsUrl = coordinates
-        ? `https://www.openstreetmap.org/directions?to=${encodeURIComponent(
+        ? `https://www.openstreetmap.org/directions?from=${encodeURIComponent(
+            startCoordinates
+                ? `${startCoordinates[1]},${startCoordinates[0]}`
+                : ''
+        )}&to=${encodeURIComponent(
             `${coordinates[1]},${coordinates[0]}`
         )}`
         : null

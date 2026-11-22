@@ -23,6 +23,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 @Component
 public class NominatimRestaurantGeocoder implements RestaurantGeocoder {
     private static final Logger logger =
@@ -59,6 +62,14 @@ public class NominatimRestaurantGeocoder implements RestaurantGeocoder {
 
     @Override
     public synchronized Optional<GeoJsonPoint> geocode(Address address) {
+        return lookup(address, false);
+    }
+
+    public synchronized Optional<GeoJsonPoint> geocodeStartAddress(Address address) {
+        return lookup(address, true);
+    }
+
+    private Optional<GeoJsonPoint> lookup(Address address, boolean reportErrors) {
         if (address == null) {
             return Optional.empty();
         }
@@ -129,6 +140,15 @@ public class NominatimRestaurantGeocoder implements RestaurantGeocoder {
             return point;
         } catch (RestClientException | NumberFormatException exception) {
             logger.warn("Nominatim konnte die Adresse nicht geocodieren.", exception);
+
+            if (reportErrors) {
+                throw new ResponseStatusException(
+                        HttpStatus.SERVICE_UNAVAILABLE,
+                        "Der Geocoding-Dienst ist derzeit nicht erreichbar.",
+                        exception
+                );
+            }
+
             return Optional.empty();
         }
     }

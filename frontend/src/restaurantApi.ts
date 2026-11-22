@@ -59,3 +59,24 @@ export function deleteRestaurant(id: string): Promise<void> {
     return axios.delete(`/api/restaurants/${encodeURIComponent(id)}`)
         .then(() => undefined)
 }
+
+export type StartAddress = {
+    street: string
+    buildingNumber: string
+    postcode: string
+    city: string
+}
+
+export type StartPoint = {
+    address: StartAddress
+    location: RestaurantLocation
+}
+
+export function geocodeStartAddress(
+    address: StartAddress
+): Promise<RestaurantLocation> {
+    return axios.post<RestaurantLocation>(
+        '/api/geocoding/start-address',
+        address
+    ).then((response) => response.data)
+}
