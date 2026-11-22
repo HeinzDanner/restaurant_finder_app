@@ -40,6 +40,7 @@ export default function WelcomePage({
     const navigate = useNavigate()
     const isAdmin = true
 
+    const [now, setNow] = useState(new Date())
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
@@ -52,6 +53,11 @@ export default function WelcomePage({
     const [addressError, setAddressError] = useState('')
     const [searchingAddress, setSearchingAddress] = useState(false)
     const [showMap, setShowMap] = useState(false)
+
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 60000)
+        return () => clearInterval(timer)
+    }, [])
 
     useEffect(() => {
         getRestaurants()
@@ -159,6 +165,7 @@ export default function WelcomePage({
                     <RestaurantPreview
                         key={restaurant.id}
                         restaurant={restaurant}
+                        now={now}
                     />
                 ))}
             </section>
@@ -236,7 +243,9 @@ export default function WelcomePage({
                 </select>
 
                 <button type="submit" disabled={searchingAddress}>
-                    {searchingAddress ? 'Adresse wird gesucht ...' : 'Umkreis suchen'}
+                    {searchingAddress
+                        ? 'Adresse wird gesucht ...'
+                        : 'Umkreis suchen'}
                 </button>
 
                 <button
