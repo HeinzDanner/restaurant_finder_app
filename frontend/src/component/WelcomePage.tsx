@@ -38,7 +38,22 @@ export default function WelcomePage({
                                         setRadiusActive
                                     }: WelcomePageProps) {
     const navigate = useNavigate()
-    const isAdmin = true
+
+
+    // null = nicht angemeldet, string = GitHub-Name
+    const [user, setUser] = useState<string | null>(null)
+
+    useEffect(() => {
+        axios.get<string>('/api/auth/me')
+            .then((response) => setUser(response.data))
+            .catch(() => setUser(null))
+    }, [])
+
+    function login() {
+        // Dev-Modus (Vite 5173) → Backend auf 8080, sonst dieselbe Adresse
+        const host = window.location.port === '5173' ? 'http://localhost:8080' : window.location.origin
+        window.location.href = host + '/oauth2/authorization/github'
+    }
 
     const [now, setNow] = useState(new Date())
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
@@ -176,12 +191,13 @@ export default function WelcomePage({
         <>
             <h1>Welcome to Restaurant finder</h1>
 
-            {isAdmin && (
-                <button
-                    className="add-button"
-                    onClick={() => navigate('/addNewRestaurant')}
-                >
-                    Add new restaurant
+            {user ? (
+                <button type="button" className="add-button" onClick={() => navigate('/addNewRestaurant')}>
+                    Restaurant hinzufügen
+                </button>
+            ) : (
+                <button type="button" className="add-button" onClick={login}>
+                    Anmelden, um Restaurants hinzuzufügen
                 </button>
             )}
 
@@ -299,7 +315,7 @@ export default function WelcomePage({
                 </>
             )}
 
-            
+
             <p>
                 Adresssuche:{' '}
                 <a
