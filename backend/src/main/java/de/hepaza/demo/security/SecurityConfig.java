@@ -42,7 +42,7 @@ public class SecurityConfig {
                 // GitHub-Login, danach zurück zum Frontend
                 .oauth2Login(o -> o
                         .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
-                        .defaultSuccessUrl(appUrl, true))
+                        .defaultSuccessUrl(appUrl + "/addNewRestaurant", true))
                 // Abmelden per POST /api/auth/logout
                 .logout(l -> l
                         .logoutUrl("/api/auth/logout")
