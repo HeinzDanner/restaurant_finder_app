@@ -6,7 +6,7 @@ import {
     type Restaurant,
     type RestaurantFormData
 } from '../restaurantApi'
-import '../AddNewRestaurant.css'
+import '../stylesheels/AddNewRestaurant.css'
 
 const availableCuisines = [
     'italienisch',

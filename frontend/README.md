@@ -37,6 +37,6 @@ Im Deployment muss der Webserver `/api` an das Backend weiterleiten.
 ## Zusammenarbeit
 
 `package-lock.json` mit dem Projekt teilen; alle Teammitglieder installieren mit
-`npm ci` dieselben Abhaengigkeiten. `node_modules` und `dist` bleiben lokal
-(siehe `.gitignore`). UI und Statusabfrage stehen in `src/App.tsx`,
-das Layout in `src/App.css` und globale Stile in `src/index.css`.
+`npm ci` dieselben Abhaengigkeiten. `node_modules` und `dist` bleiben lokal (siehe `.gitignore`). UI und Statusabfrage
+stehen in `src/App.tsx`,
+das Layout in `src/stylesheels/App.css` und globale Stile in `src/stylesheels/index.css`.

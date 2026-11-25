@@ -11,7 +11,8 @@ import {
     type StartAddress,
     type StartPoint
 } from '../restaurantApi'
-import '../WelcomePage.css'
+import '../stylesheels/WelcomePage.css'
+import type {AppUser} from "../AppUser.ts";
 
 type WelcomePageProps = {
     startPoint: StartPoint | null
@@ -20,6 +21,8 @@ type WelcomePageProps = {
     setRadius: (radius: number) => void
     radiusActive: boolean
     setRadiusActive: (active: boolean) => void
+    user: AppUser | null | undefined
+    /* setUser: (user: AppUser | null) => void*/
 }
 
 const emptyAddress: StartAddress = {
@@ -35,24 +38,21 @@ export default function WelcomePage({
                                         radius,
                                         setRadius,
                                         radiusActive,
-                                        setRadiusActive
-                                    }: WelcomePageProps) {
+                                        setRadiusActive,
+                                        user,
+                                        /* setUser*/
+                                    }: Readonly<WelcomePageProps>) {
     const navigate = useNavigate()
-
-
-    // null = nicht angemeldet, string = GitHub-Name
-    const [user, setUser] = useState<string | null>(null)
-
-    useEffect(() => {
-        axios.get<string>('/api/auth/me')
-            .then((response) => setUser(response.data))
-            .catch(() => setUser(null))
-    }, [])
 
     function login() {
         // Dev-Modus (Vite 5173) → Backend auf 8080, sonst dieselbe Adresse
         const host = window.location.port === '5173' ? 'http://localhost:8080' : window.location.origin
         window.location.href = host + '/oauth2/authorization/github'
+    }
+
+    function logout() {
+        axios.post('/api/auth/logout')
+            .then(() => window.location.reload())
     }
 
     const [now, setNow] = useState(new Date())
@@ -191,7 +191,14 @@ export default function WelcomePage({
         <>
             <h1>Welcome to Restaurant finder</h1>
 
-            {user ? (
+            {user && (
+                <p>
+                    Angemeldet als <strong>{user.username}</strong>{' '}
+                    <button type="button" onClick={logout}>Abmelden</button>
+                </p>
+            )}
+
+            {user?.role === 'USER' ? (
                 <button type="button" className="add-button" onClick={() => navigate('/addNewRestaurant')}>
                     Restaurant hinzufügen
                 </button>

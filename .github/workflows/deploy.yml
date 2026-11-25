@@ -59,7 +59,7 @@ jobs:
   # -------------------------------------------------------------------
   build-backend:
     name: Build Backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build-frontend
 
     steps:
@@ -138,7 +138,7 @@ jobs:
   # -------------------------------------------------------------------
   deploy-to-render:
     name: Deploy to Render
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Erst starten, wenn das neue Image auf Docker Hub liegt
     needs: push-to-docker-hub
 

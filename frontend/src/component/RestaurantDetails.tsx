@@ -1,7 +1,8 @@
 import {useState} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom'
 import {deleteRestaurant, type Restaurant, type StartPoint} from '../restaurantApi'
-import '../RestaurantDetails.css'
+import '../stylesheels/RestaurantDetails.css'
+import type {AppUser} from "../AppUser.ts";
+import {useLocation, useNavigate} from "react-router-dom";
 
 type RestaurantDetailsState = Restaurant & {
     geocodingWarning?: boolean
@@ -9,9 +10,10 @@ type RestaurantDetailsState = Restaurant & {
 
 type RestaurantDetailsProps = {
     startPoint: StartPoint | null
+    user?: AppUser | null | undefined
 }
 
-export default function RestaurantDetails({startPoint}: RestaurantDetailsProps) {
+export default function RestaurantDetails({startPoint, user}: Readonly<RestaurantDetailsProps>) {
     const location = useLocation()
     const navigate = useNavigate()
     const restaurant = location.state as RestaurantDetailsState | null
@@ -97,25 +99,29 @@ export default function RestaurantDetails({startPoint}: RestaurantDetailsProps) 
                         </p>
                     )}
 
-                    <div className="restaurant-actions">
-                        <button
-                            type="button"
-                            disabled={deleting}
-                            onClick={() => navigate(
-                                `/editRestaurant/${encodeURIComponent(restaurant.id)}`
-                            )}
-                        >
-                            ✏️ Bearbeiten
-                        </button>
+                    <section className="restaurant-actions">
+                        {user?.role === 'USER' && (
+                            <>
+                                <button
+                                    type="button"
+                                    disabled={deleting}
+                                    onClick={() => navigate(
+                                        `/editRestaurant/${encodeURIComponent(restaurant.id)}`
+                                    )}
+                                >
+                                    ✏️ Bearbeiten
+                                </button>
 
-                        <button
-                            type="button"
-                            disabled={deleting}
-                            onClick={handleDelete}
-                        >
-                            🗑️ Löschen
-                        </button>
-                    </div>
+                                <button
+                                    type="button"
+                                    disabled={deleting}
+                                    onClick={handleDelete}
+                                >
+                                    🗑️ Löschen
+                                </button>
+                            </>
+                        )}
+                    </section>
 
                     {deleteError && <p role="alert">{deleteError}</p>}
                 </>

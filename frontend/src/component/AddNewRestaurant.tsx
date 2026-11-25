@@ -2,7 +2,7 @@ import {type FormEvent, useState} from 'react'
 import {createRestaurant} from '../restaurantApi'
 import {useNavigate} from "react-router-dom";
 import type {RestaurantFormData} from "../restaurantApi.ts";
-import '../AddNewRestaurant.css'
+import '../stylesheels/AddNewRestaurant.css'
 
 
 export default function AddNewRestaurant() {
