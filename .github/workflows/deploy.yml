@@ -59,7 +59,7 @@ jobs:
   # -------------------------------------------------------------------
   build-backend:
     name: Build Backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build-frontend
 
     steps:
