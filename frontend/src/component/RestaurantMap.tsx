@@ -2,7 +2,7 @@ import L from 'leaflet'
 import {Circle, MapContainer, Marker, Popup, TileLayer} from 'react-leaflet'
 import type {Restaurant, RestaurantLocation, StartPoint} from '../restaurantApi'
 import 'leaflet/dist/leaflet.css'
-import './RestaurantMap.css'
+import '../stylesheels/RestaurantMap.css'
 
 type RestaurantMapProps = {
     startPoint: StartPoint

@@ -1,5 +1,6 @@
 package de.hepaza.demo.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,13 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Value("${app.url}")
     private String appUrl;
+
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,9 +29,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // Nur das Anlegen eines Restaurants braucht einen Login
-                        .requestMatchers(HttpMethod.POST, "/api/restaurants").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/restaurants/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/restaurants/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/restaurants").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/restaurants/**").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/restaurants/**").hasAuthority("USER")
                         // "Wer bin ich?" braucht natürlich auch einen Login
                         .requestMatchers("/api/auth/me").authenticated()
                         // Alles andere ist offen
@@ -36,7 +40,9 @@ public class SecurityConfig {
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 // GitHub-Login, danach zurück zum Frontend
-                .oauth2Login(o -> o.defaultSuccessUrl(appUrl, true))
+                .oauth2Login(o -> o
+                        .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
+                        .defaultSuccessUrl(appUrl, true))
                 // Abmelden per POST /api/auth/logout
                 .logout(l -> l
                         .logoutUrl("/api/auth/logout")

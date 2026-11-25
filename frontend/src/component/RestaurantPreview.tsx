@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import type {Restaurant} from "../restaurantApi.ts";
-import '../RestaurantPreview.css'
+import '../stylesheels/RestaurantPreview.css'
 import {hasOpeningHours, isOpenNow} from "./openingHours.ts";
 
 type RestaurantPreviewProps = {
